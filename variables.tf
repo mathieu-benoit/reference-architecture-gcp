@@ -40,3 +40,9 @@ variable "humanitec_prefix" {
   description = "A prefix that will be attached to all IDs created in Humanitec."
   default     = "htc-ref-arch-"
 }
+
+variable "gar_repository_id" {
+  type        = string
+  description = "ID of the Google Artifact Registry repository."
+  default     = "htc-ref-arch-cluster"
+}
