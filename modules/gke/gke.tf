@@ -101,6 +101,11 @@ resource "google_container_cluster" "gke" {
     enable_private_nodes    = true
   }
 
+  security_posture_config {
+    mode = "BASIC"
+    vulnerability_mode = "VULNERABILITY_ENTERPRISE"
+  }
+
   lifecycle {
     ignore_changes = [
       node_config # otherwise destroy/recreate with Autopilot...
