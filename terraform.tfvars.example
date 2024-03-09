@@ -5,6 +5,9 @@ environment = ""
 # The environment type to associate the reference architecture with.
 environment_type = "development"
 
+# ID of the Google Artifact Registry repository.
+gar_repository_id = "htc-ref-arch-cluster"
+
 # ID of the Humanitec Organization to associate resources with.
 humanitec_org_id = ""
 
