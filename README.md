@@ -215,6 +215,34 @@ Once you are finished with the reference architecture, you can remove all provis
 | humanitec\_prefix | A prefix that will be attached to all IDs created in Humanitec. | `string` | `"htc-ref-arch-"` | no |
 <!-- END_TF_DOCS -->
 
+## Deploy a Workload
+
+```bash
+APP=ref-arch
+ENVIRONMENT=development
+
+humctl create app ${APP}
+
+cat <<EOF > score.yaml
+apiVersion: score.dev/v1b1
+metadata:
+  name: ref-arch
+containers:
+  ref-arch:
+    image: .
+EOF
+
+score-humanitec delta \
+    --retry \
+    --deploy \
+    --token ${HUMANITEC_TOKEN} \
+    --org ${HUMANITEC_ORG} \
+    --app ${APP} \
+    --env ${ENVIRONMENT} \
+    -f score.yaml \
+    --image ghcr.io/mathieu-benoit/my-sample-app:latest
+```
+
 ## Learn more
 
 Expand your knowledge by heading over to our learning path, and discover how to:
