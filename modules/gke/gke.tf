@@ -102,8 +102,8 @@ resource "google_container_cluster" "gke" {
   }
 
   security_posture_config {
-    mode                = "BASIC"
-    vulnerability_mode  = "VULNERABILITY_ENTERPRISE"
+    mode               = "BASIC"
+    vulnerability_mode = "VULNERABILITY_ENTERPRISE"
   }
 
   lifecycle {
