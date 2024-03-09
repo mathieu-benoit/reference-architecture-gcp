@@ -66,10 +66,13 @@ By default, the following will be provisioned:
 
 - VPC
 - GKE Autopilot Cluster
+- Google Artifact Registry
 - Google Service Account to access the cluster
 - Ingress NGINX in the cluster
 - Resource Definitions in Humanitec for:
   - Kubernetes Cluster
+  - Namespace (add PSS/PSA label)
+  - Workload (add `securityContext`)
 
 ### Prerequisites
 
@@ -106,9 +109,18 @@ This reference architecture implementation uses Terraform. You will need to do t
 5. Run terraform:
 
    ```
-   terraform init
-   terraform plan
-   terraform apply
+   GCP_PROJECT_ID=FIXME
+   GCP_REGION=FIXME
+   HUMANITEC_ORG_ID=FIXME
+
+   terraform init \
+      -upgrade
+   terraform plan \
+      -var project_id=${GCP_PROJECT_ID} \
+      -var humanitec_org_id=${HUMANITEC_ORG_ID} \
+      -var region=${GCP_REGION} \
+      -out out.tfplan
+   terraform apply out.tfplan
    ```
 
 #### Required input variables
