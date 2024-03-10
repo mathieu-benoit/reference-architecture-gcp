@@ -101,6 +101,16 @@ resource "kubernetes_manifest" "agent-deployment" {
                   "ephemeral-storage" = "1Gi"
                 }
               }
+              "securityContext" = {
+                "allowPrivilegeEscalation" = false
+                "capabilities" = {
+                  "drop" = [
+                    "ALL"
+                  ]
+                }
+                "privileged"             = false
+                "readOnlyRootFilesystem" = true
+              }
               "volumeMounts" = [
                 {
                   "mountPath" = "/keys"
@@ -115,6 +125,10 @@ resource "kubernetes_manifest" "agent-deployment" {
             "fsGroupChangePolicy" = "Always"
             "runAsGroup"          = 1000
             "runAsUser"           = 1000
+            "runAsNonRoot"        = true
+            "seccompProfile" = {
+              "type" = "RuntimeDefault"
+            }
           }
           "volumes" = [
             {
@@ -140,11 +154,5 @@ resource "kubernetes_manifest" "agent-deployment" {
         }
       }
     }
-  }
-
-  lifecycle {
-    ignore_changes = [
-      manifest.spec[0].template[0].spec[0].container[0].resources.limits.ephemeral-storage,
-    ]
   }
 }
