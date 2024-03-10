@@ -12,6 +12,7 @@ resource "humanitec_resource_definition" "k8s_cluster" {
       "zone"         = var.k8s_region
     }),
     secrets_string = jsonencode({
+      "agent_url"   = "$${resources.agent.outputs.url}"
       "credentials" = var.k8s_credentials
     })
   }
@@ -21,5 +22,4 @@ resource "humanitec_resource_definition_criteria" "k8s_cluster" {
   resource_definition_id = humanitec_resource_definition.k8s_cluster.id
   env_id                 = var.environment
   env_type               = var.environment_type
-
 }

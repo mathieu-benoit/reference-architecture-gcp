@@ -31,13 +31,6 @@ resource "google_container_cluster" "gke" {
 
   master_authorized_networks_config {
 
-    dynamic "cidr_blocks" {
-      for_each = data.humanitec_source_ip_ranges.main.cidr_blocks
-      content {
-        cidr_block = cidr_blocks.key
-      }
-    }
-
     cidr_blocks {
       # Open to public internet to make it easier to connect for testing
       # At least the local IP running terraform needs to be included

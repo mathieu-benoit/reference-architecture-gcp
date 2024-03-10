@@ -32,3 +32,8 @@ variable "prefix" {
   description = "A prefix that will be attached to all IDs created in Humanitec."
   default     = ""
 }
+variable "agent_public_key" {
+  description = "The public key of the Agent."
+  type        = string
+  sensitive   = true
+}

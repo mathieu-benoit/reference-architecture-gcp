@@ -70,3 +70,15 @@ variable "gar_repository_location" {
   type        = string
   default     = null
 }
+
+variable "agent_humanitec_org_id" {
+  type        = string
+  description = "ID of the Humanitec Organization to associate resources with."
+}
+
+variable "agent_private_key" {
+  description = "The private key of the Agent."
+  type        = string
+  sensitive   = true
+}
+

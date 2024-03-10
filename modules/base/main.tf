@@ -29,6 +29,15 @@ module "network" {
 }
 
 # ######################################################################
+# # Create a Private/Public key for the Humanitec Agent
+# ######################################################################
+
+resource "tls_private_key" "agent" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+# ######################################################################
 # # KUBERNETES MODULE: GKE
 # ######################################################################
 module "k8s" {
@@ -44,6 +53,9 @@ module "k8s" {
 
   gar_repository_id       = var.gar_repository_id
   gar_repository_location = var.gar_repository_location
+
+  agent_humanitec_org_id = var.humanitec_org_id
+  agent_private_key      = tls_private_key.agent.private_key_pem
 }
 
 # ######################################################################
@@ -59,4 +71,5 @@ module "res_defs" {
   environment      = var.environment
   environment_type = var.environment_type
   prefix           = var.humanitec_prefix
+  agent_public_key = tls_private_key.agent.public_key_pem
 }
