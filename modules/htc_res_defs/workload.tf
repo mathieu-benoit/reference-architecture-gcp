@@ -44,4 +44,5 @@ resource "humanitec_resource_definition_criteria" "workload" {
   resource_definition_id = humanitec_resource_definition.workload.id
   env_id                 = var.environment
   env_type               = var.environment_type
+  force_delete           = true
 }
