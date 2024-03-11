@@ -11,6 +11,9 @@ gar_repository_location = ""
 # GitHub org id
 github_org_id = ""
 
+# GKE Release channel to be used
+gke_release_channel = "RAPID"
+
 # Humanitec CI Service User Token
 humanitec_ci_service_user_token = ""
 

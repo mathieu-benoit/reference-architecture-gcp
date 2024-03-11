@@ -136,5 +136,6 @@ Once you are finished with the reference architecture, you can remove all provis
 | region | GCP Region to provision resources in. | `string` | n/a | yes |
 | environment | The environment to associate the reference architecture with. | `string` | `null` | no |
 | environment\_type | The environment type to associate the reference architecture with. | `string` | `"development"` | no |
+| gke\_release\_channel | GKE Release channel to be used | `string` | `"RAPID"` | no |
 | humanitec\_prefix | A prefix that will be attached to all IDs created in Humanitec. | `string` | `"htc-ref-arch-"` | no |
 <!-- END_TF_DOCS -->

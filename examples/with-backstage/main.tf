@@ -18,5 +18,5 @@ module "base" {
   gar_repository_id       = local.repository_id
   gar_repository_location = var.gar_repository_location
 
-  gke_release_channel     = var.gke_release_channel
+  gke_release_channel = var.gke_release_channel
 }
