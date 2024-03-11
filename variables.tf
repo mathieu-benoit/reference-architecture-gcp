@@ -46,3 +46,9 @@ variable "gar_repository_id" {
   description = "ID of the Google Artifact Registry repository."
   default     = "htc-ref-arch-cluster"
 }
+
+variable "gke_release_channel" {
+  description = "GKE Release channel to be used"
+  type        = string
+  default     = "RAPID"
+}

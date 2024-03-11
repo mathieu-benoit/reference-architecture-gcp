@@ -111,9 +111,9 @@ This reference architecture implementation uses Terraform. You will need to do t
 5. Run terraform:
 
    ```
-   GCP_PROJECT_ID=FIXME
-   GCP_REGION=FIXME
-   HUMANITEC_ORG_ID=FIXME
+   export GCP_PROJECT_ID=FIXME
+   export GCP_REGION=FIXME
+   export HUMANITEC_ORG_ID=FIXME
 
    terraform init \
       -upgrade

@@ -32,4 +32,5 @@ module "base" {
   environment_type        = var.environment_type
   gar_repository_id       = var.gar_repository_id
   gar_repository_location = var.region
+  gke_release_channel     = var.gke_release_channel
 }

@@ -100,6 +100,11 @@ variable "gke_autopilot" {
   default     = true
 }
 
+variable "gke_release_channel" {
+  description = "GKE Release channel to be used"
+  type        = string
+}
+
 variable "gar_repository_id" {
   type        = string
   description = "ID of the Google Artifact Registry repository (not created if empty)."

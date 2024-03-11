@@ -50,6 +50,7 @@ module "k8s" {
   subnet           = { for s in module.network.subnet_names : s => s if s == var.gke_subnet_name }[var.gke_subnet_name]
   vpc_name         = var.vpc_name
   enable_autopilot = var.gke_autopilot
+  release_channel  = var.gke_release_channel
 
   gar_repository_id       = var.gar_repository_id
   gar_repository_location = var.gar_repository_location
