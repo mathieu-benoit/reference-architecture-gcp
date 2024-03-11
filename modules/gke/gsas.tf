@@ -35,3 +35,20 @@ resource "google_service_account_key" "gke_cluster_access_key" {
 
   depends_on = [google_project_iam_member.gke_admin]
 }
+
+resource "google_service_account" "terraform_runner" {
+  account_id  = "${var.cluster_name}-tf-runner"
+  description = "Account used by Humanitec to provision the Google Cloud infrastructure via the Terraform Driver"
+}
+
+resource "google_project_iam_member" "terraform_runner" {
+  project = var.project_id
+  role    = "roles/owner"
+  member  = "serviceAccount:${google_service_account.terraform_runner.email}"
+}
+
+resource "google_service_account_iam_member" "terraform_runner_wi" {
+  service_account_id  = google_service_account.terraform_runner.name
+  role                = "roles/iam.workloadIdentityUser"
+  member              = "serviceAccount:${var.project_id}.svc.id.goog[${kubernetes_namespace.terraform-runner.metadata.0.name}/${kubernetes_service_account.terraform-runner.metadata.0.name}]"
+}
