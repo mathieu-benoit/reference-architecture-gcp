@@ -48,7 +48,7 @@ resource "google_project_iam_member" "terraform_runner" {
 }
 
 resource "google_service_account_iam_member" "terraform_runner_wi" {
-  service_account_id  = google_service_account.terraform_runner.name
-  role                = "roles/iam.workloadIdentityUser"
-  member              = "serviceAccount:${var.project_id}.svc.id.goog[${kubernetes_namespace.terraform-runner.metadata.0.name}/${kubernetes_service_account.terraform-runner.metadata.0.name}]"
+  service_account_id = google_service_account.terraform_runner.name
+  role               = "roles/iam.workloadIdentityUser"
+  member             = "serviceAccount:${var.project_id}.svc.id.goog[${kubernetes_namespace.terraform-runner.metadata.0.name}/${kubernetes_service_account.terraform-runner.metadata.0.name}]"
 }
