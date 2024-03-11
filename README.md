@@ -73,6 +73,8 @@ By default, the following will be provisioned:
   - Kubernetes Cluster
   - Namespace (add PSS/PSA label)
   - Workload (add `securityContext`)
+  - Agent
+  - Private Terraform runner
 
 ### Prerequisites
 
@@ -217,6 +219,8 @@ Once you are finished with the reference architecture, you can remove all provis
 
 ## Deploy a Workload
 
+### Simple Workload
+
 ```bash
 APP=ref-arch
 ENVIRONMENT=development
@@ -230,6 +234,81 @@ metadata:
 containers:
   ref-arch:
     image: .
+EOF
+
+score-humanitec delta \
+    --retry \
+    --deploy \
+    --token ${HUMANITEC_TOKEN} \
+    --org ${HUMANITEC_ORG} \
+    --app ${APP} \
+    --env ${ENVIRONMENT} \
+    -f score.yaml \
+    --image ghcr.io/mathieu-benoit/my-sample-app:latest
+```
+
+### Workload with GCS
+
+```bash
+cat <<EOF > gcs.yaml
+apiVersion: entity.humanitec.io/v1b1
+kind: Definition
+metadata:
+  id: gcs
+entity:
+  driver_type: humanitec/terraform
+  name: gcs
+  type: gcs
+  driver_inputs:
+    values:
+      append_logs_to_error: true
+      runner_mode: custom-kubernetes
+      runner:
+        cluster_type: gke
+        cluster:
+          loadbalancer: \${resources['config#terraform-runner'].outputs.loadbalancer}
+          name: \${resources['config#terraform-runner'].outputs.name}
+          project_id: \${resources['config#terraform-runner'].outputs.project_id}
+          zone: \${resources['config#terraform-runner'].outputs.zone}
+        service_account: humanitec-terraform-runner
+        namespace: humanitec-terraform-runner
+      script: |-
+        terraform {
+          backend "gcs" {
+            bucket  = "htc-ref-arch-cluster-terraform-runner-state"
+          }
+        }
+        output "name" {
+          value = "hard-coded-account"
+        }
+    secrets:
+      runner:
+        credentials: \${resources['config#terraform-runner'].outputs.credentials}
+        agent_url: \${resources['agent.default#agent'].outputs.url}
+  criteria:
+    - env_type: development
+EOF
+
+humctl apply \
+    -f gcs.yaml
+```
+
+```bash
+APP=ref-arch
+ENVIRONMENT=development
+
+humctl create app ${APP}
+
+cat <<EOF > score.yaml
+apiVersion: score.dev/v1b1
+metadata:
+  name: ref-arch
+containers:
+  ref-arch:
+    image: .
+resources:
+  my-gcs:
+    type: gcs
 EOF
 
 score-humanitec delta \
