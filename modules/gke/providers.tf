@@ -12,9 +12,9 @@ terraform {
     kubernetes = {
       source = "hashicorp/kubernetes"
     }
-    # http = {
-    #   source = "hashicorp/http"
-    # }
+    http = {
+      source = "hashicorp/http"
+    }
   }
 }
 

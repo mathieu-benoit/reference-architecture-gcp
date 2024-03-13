@@ -19,13 +19,19 @@ resource "google_project_service" "apis" {
 # ######################################################################
 # # NETWORKING MODULE: VPC
 # ######################################################################
+resource "google_compute_address" "addr_nat" {
+  name   = "${var.vpc_name}-nat"
+  region = var.region
+}
+
 module "network" {
-  source          = "../network"
-  project_id      = var.project_id
-  region          = var.region
-  vpc_name        = var.vpc_name
-  vpc_description = var.vpc_description
-  subnets         = [for s in var.vpc_subnets : merge(s, { region = s.region == null ? var.region : s.region })]
+  source                = "../network"
+  project_id            = var.project_id
+  region                = var.region
+  vpc_name              = var.vpc_name
+  vpc_description       = var.vpc_description
+  subnets               = [for s in var.vpc_subnets : merge(s, { region = s.region == null ? var.region : s.region })]
+  nat_address_self_link = google_compute_address.addr_nat.self_link
 }
 
 # ######################################################################
@@ -55,8 +61,9 @@ module "k8s" {
   gar_repository_id       = var.gar_repository_id
   gar_repository_location = var.gar_repository_location
 
-  agent_humanitec_org_id = var.humanitec_org_id
-  agent_private_key      = tls_private_key.agent.private_key_pem
+  agent_humanitec_org_id            = var.humanitec_org_id
+  agent_private_key                 = tls_private_key.agent.private_key_pem
+  agent_humanitec_egress_ip_address = google_compute_address.addr_nat.address
 }
 
 # ######################################################################

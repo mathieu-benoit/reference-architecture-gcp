@@ -52,7 +52,8 @@ resource "google_compute_router" "router" {
 resource "google_compute_router_nat" "router_nat" {
   name                               = var.vpc_name
   router                             = google_compute_router.router.name
-  nat_ip_allocate_option             = "AUTO_ONLY"
+  nat_ip_allocate_option             = "MANUAL_ONLY"
+  nat_ips                            = [var.nat_address_self_link]
   region                             = var.region
   source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
   dynamic "subnetwork" {

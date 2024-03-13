@@ -32,13 +32,15 @@ resource "google_container_cluster" "gke" {
   master_authorized_networks_config {
 
     cidr_blocks {
-      # Open to public internet to make it easier to connect for testing
-      # At least the local IP running terraform needs to be included
-      cidr_block = "0.0.0.0/0"
-
-      # Alternative for tighter access, but less flexibility:
-      # cidr_block = "${chomp(data.http.icanhazip.response_body)}/32"
+      # Access from this Terraform script to deploy Kubernetes/Helm resources in the GKE cluster:
+      cidr_block = "${chomp(data.http.icanhazip.response_body)}/32"
     }
+
+    cidr_blocks {
+      # Access from the Humanitec Agent deployed in the GKE cluster:
+      cidr_block = "${var.agent_humanitec_egress_ip_address}/32"
+    }
+
     gcp_public_cidrs_access_enabled = false
   }
 

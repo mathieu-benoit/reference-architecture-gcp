@@ -82,3 +82,7 @@ variable "agent_private_key" {
   sensitive   = true
 }
 
+variable "agent_humanitec_egress_ip_address" {
+  description = "The IP address in egress of the Humanitec Agent accessing the GKE cluster."
+  type        = string
+}

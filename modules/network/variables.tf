@@ -71,3 +71,7 @@ variable "log_config_defaults" {
   }
 }
 
+variable "nat_address_self_link" {
+  description = "The Self-link of NAT IP."
+  type        = string
+}
