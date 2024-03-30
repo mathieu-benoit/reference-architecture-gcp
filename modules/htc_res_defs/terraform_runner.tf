@@ -19,7 +19,7 @@ resource "humanitec_resource_definition" "terraform-runner" {
 }
 
 resource "humanitec_resource_definition_criteria" "terraform-runner" {
-  resource_definition_id = humanitec_resource_definition.k8s_namespace.id
+  resource_definition_id = humanitec_resource_definition.terraform-runner.id
   env_id                 = var.environment
   env_type               = var.environment_type
   res_id                 = "terraform-runner"
