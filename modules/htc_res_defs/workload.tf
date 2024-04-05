@@ -12,6 +12,9 @@ resource "humanitec_resource_definition" "workload" {
         outputs   = <<EOL
 update:
   - op: add
+    path: /spec/serviceAccountName
+    value: $${resources.k8s-service-account.outputs.name}
+  - op: add
     path: /spec/automountServiceAccountToken
     value: false
   - op: add
