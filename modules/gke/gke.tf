@@ -28,6 +28,9 @@ resource "google_container_cluster" "gke" {
     }
   }
 
+  fleet {
+    project = var.project_id
+  }
 
   master_authorized_networks_config {
 
