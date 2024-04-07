@@ -17,6 +17,9 @@ humanitec_org_id = ""
 # A prefix that will be attached to all IDs created in Humanitec.
 humanitec_prefix = "htc-ref-arch-"
 
+# Custom resource definitions must be applied before custom resources.
+istio_crds_already_installed = false
+
 # GCP Project ID to provision resources in.
 project_id = ""
 

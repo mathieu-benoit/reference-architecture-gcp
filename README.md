@@ -216,6 +216,7 @@ Once you are finished with the reference architecture, you can remove all provis
 | gar\_repository\_id | ID of the Google Artifact Registry repository. | `string` | `"htc-ref-arch-cluster"` | no |
 | gke\_release\_channel | GKE Release channel to be used | `string` | `"RAPID"` | no |
 | humanitec\_prefix | A prefix that will be attached to all IDs created in Humanitec. | `string` | `"htc-ref-arch-"` | no |
+| istio\_crds\_already\_installed | Custom resource definitions must be applied before custom resources. | `bool` | `false` | no |
 <!-- END_TF_DOCS -->
 
 ## Deploy a Workload
