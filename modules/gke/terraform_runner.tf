@@ -1,8 +1,9 @@
 resource "kubernetes_namespace" "terraform-runner" {
   metadata {
     labels = {
-      "app.kubernetes.io/name"     = "humanitec-terraform-runner"
-      "app.kubernetes.io/instance" = "humanitec-terraform-runner"
+      "app.kubernetes.io/name"             = "humanitec-terraform-runner"
+      "app.kubernetes.io/instance"         = "humanitec-terraform-runner"
+      "pod-security.kubernetes.io/enforce" = "restricted"
     }
 
     name = "humanitec-terraform-runner"
