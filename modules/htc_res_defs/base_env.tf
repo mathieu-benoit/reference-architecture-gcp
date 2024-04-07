@@ -9,19 +9,19 @@ resource "humanitec_resource_definition" "base_env" {
     values_string = jsonencode({
       append_logs_to_error = true
       runner_mode          = "custom-kubernetes"
-      
+
       runner = {
         cluster_type = "gke"
         cluster = {
-          region                   = "$${resources['config.default#terraform-runner'].outputs.zone}"
-          name                     = "$${resources['config.default#terraform-runner'].outputs.name}"
-          loadbalancer             = "$${resources['config.default#terraform-runner'].outputs.loadbalancer}"
-          project_id               = "$${resources['config.default#terraform-runner'].outputs.project_id}"
+          region       = "$${resources['config.default#terraform-runner'].outputs.zone}"
+          name         = "$${resources['config.default#terraform-runner'].outputs.name}"
+          loadbalancer = "$${resources['config.default#terraform-runner'].outputs.loadbalancer}"
+          project_id   = "$${resources['config.default#terraform-runner'].outputs.project_id}"
         }
         # FIXME - hard coded for now, needs to be passed as module's var.
         service_account = "humanitec-terraform-runner"
         # FIXME - hard coded for now, needs to be passed as module's var.
-        namespace       = "humanitec-terraform-runner"
+        namespace = "humanitec-terraform-runner"
       }
 
       script = <<EOL
