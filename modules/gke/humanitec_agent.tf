@@ -1,8 +1,9 @@
 resource "kubernetes_namespace" "agent-namespace" {
   metadata {
     labels = {
-      "app.kubernetes.io/name"     = "humanitec-agent"
-      "app.kubernetes.io/instance" = "humanitec-agent"
+      "app.kubernetes.io/name"             = "humanitec-agent"
+      "app.kubernetes.io/instance"         = "humanitec-agent"
+      "pod-security.kubernetes.io/enforce" = "restricted"
     }
 
     name = "humanitec-agent"
