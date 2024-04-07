@@ -116,3 +116,9 @@ variable "gar_repository_location" {
   description = "Location of the Google Artifact Registry repository (required when gar_repository_id is set)."
   default     = null
 }
+
+variable "istio_crds_already_installed" {
+  description = "Custom resource definitions must be applied before custom resources."
+  type        = bool
+  default     = false
+}

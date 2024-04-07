@@ -17,6 +17,7 @@ namespace.yaml:
     metadata:
       labels:
         pod-security.kubernetes.io/enforce: restricted
+        istio-injection: enabled
       name: {{ .init.name }}
 EOL
         outputs   = "namespace: {{ .init.name }}"

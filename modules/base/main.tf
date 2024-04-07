@@ -10,6 +10,7 @@ resource "google_project_service" "apis" {
     "containerscanning.googleapis.com",
     "containeranalysis.googleapis.com",
     "anthos.googleapis.com",
+    "mesh.googleapis.com",
   ])
 
   service = each.key
@@ -65,6 +66,8 @@ module "k8s" {
   agent_humanitec_org_id            = var.humanitec_org_id
   agent_private_key                 = tls_private_key.agent.private_key_pem
   agent_humanitec_egress_ip_address = google_compute_address.addr_nat.address
+
+  istio_crds_already_installed = var.istio_crds_already_installed
 }
 
 # ######################################################################

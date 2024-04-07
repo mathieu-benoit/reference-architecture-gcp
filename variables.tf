@@ -52,3 +52,9 @@ variable "gke_release_channel" {
   type        = string
   default     = "RAPID"
 }
+
+variable "istio_crds_already_installed" {
+  description = "Custom resource definitions must be applied before custom resources."
+  type        = bool
+  default     = false
+}
