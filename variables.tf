@@ -58,3 +58,9 @@ variable "istio_crds_already_installed" {
   type        = bool
   default     = false
 }
+
+variable "humanitec_crds_already_installed" {
+  description = "Custom resource definitions must be applied before custom resources."
+  type        = bool
+  default     = false
+}

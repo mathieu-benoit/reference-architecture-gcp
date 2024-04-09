@@ -69,12 +69,15 @@ By default, the following will be provisioned:
 - Google Artifact Registry
 - Google Service Account to access the cluster
 - Ingress NGINX in the cluster
+- Anthos Service Mesh (managed Istio control plane)
 - Resource Definitions in Humanitec for:
   - Kubernetes Cluster
   - Namespace (add PSS/PSA label)
   - Workload (add `securityContext`)
+  - Kubernetes Service Account (1 per Workload)
   - Agent
   - Private Terraform runner
+  - Operator with external Secrets in GSM
 
 ### Prerequisites
 
@@ -120,7 +123,10 @@ This reference architecture implementation uses Terraform. You will need to do t
    terraform plan \
       -var project_id=${GCP_PROJECT_ID} \
       -var humanitec_org_id=${HUMANITEC_ORG_ID} \
+      -var humanitec_token=${HUMANITEC_TOKEN} \
       -var region=${GCP_REGION} \
+      -var istio_crds_already_installed=true \
+      -var humanitec_crds_already_installed=true \
       -out out.tfplan
    terraform apply out.tfplan
    ```
@@ -215,8 +221,15 @@ Once you are finished with the reference architecture, you can remove all provis
 | environment\_type | The environment type to associate the reference architecture with. | `string` | `"development"` | no |
 | gar\_repository\_id | ID of the Google Artifact Registry repository. | `string` | `"htc-ref-arch-cluster"` | no |
 | gke\_release\_channel | GKE Release channel to be used | `string` | `"RAPID"` | no |
+| humanitec\_crds\_already\_installed | Custom resource definitions must be applied before custom resources. | `bool` | `false` | no |
 | humanitec\_prefix | A prefix that will be attached to all IDs created in Humanitec. | `string` | `"htc-ref-arch-"` | no |
 | istio\_crds\_already\_installed | Custom resource definitions must be applied before custom resources. | `bool` | `false` | no |
+
+### Outputs
+
+| Name | Description |
+|------|-------------|
+| operator\_public\_key | Temporary, to be removed as soon as /keys is supported via Terraform. |
 <!-- END_TF_DOCS -->
 
 ## Deploy a Workload

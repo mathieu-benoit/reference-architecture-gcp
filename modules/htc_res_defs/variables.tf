@@ -37,3 +37,17 @@ variable "agent_public_key" {
   type        = string
   sensitive   = true
 }
+variable "humanitec_org_id" {
+  type        = string
+  description = "ID of the Humanitec Organization to associate resources with."
+}
+variable "operator_public_key" {
+  description = "The public key of the Operator."
+  type        = string
+  sensitive   = true
+}
+variable "default_secret_store_access_credentials" {
+  type        = string
+  description = "The credentials used to establish a connection to the default Secret store."
+  sensitive   = true
+}

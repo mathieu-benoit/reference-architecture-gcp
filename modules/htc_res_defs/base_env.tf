@@ -1,8 +1,8 @@
 # This base-env is just to test the custom TF runner.
 resource "humanitec_resource_definition" "base_env" {
   driver_type = "humanitec/terraform"
-  id          = "base-env"
-  name        = "base-env"
+  id          = "${var.prefix}base-env"
+  name        = "${var.prefix}base-env"
   type        = "base-env"
 
   driver_inputs = {
@@ -37,10 +37,14 @@ output "output" {
 EOL
     })
 
-    secrets_string = jsonencode({
+    secret_refs = jsonencode({
       runner = {
-        credentials = "$${resources['config.default#terraform-runner'].outputs.credentials}"
-        agent_url   = "$${resources['agent.default#agent'].outputs.url}"
+        credentials = {
+          value = "$${resources['config.default#terraform-runner'].outputs.credentials}"
+        }
+        agent_url = {
+          value = "$${resources['agent.default#agent'].outputs.url}"
+        }
       }
     })
   }

@@ -12,8 +12,12 @@ resource "humanitec_resource_definition" "terraform-runner" {
       "zone"         = var.k8s_region
     })
 
-    secrets_string = jsonencode({
-      "credentials" = var.k8s_credentials
+    secret_refs = jsonencode({
+      credentials = {
+        # FIXME - hard-coded value, should be passed via var.
+        ref   = "terraform-runner-cluster-credentials"
+        store = local.primary_secret_store
+      }
     })
   }
 }

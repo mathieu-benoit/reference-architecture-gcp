@@ -35,4 +35,12 @@ module "base" {
   gke_release_channel     = var.gke_release_channel
 
   istio_crds_already_installed = var.istio_crds_already_installed
+
+  humanitec_crds_already_installed = var.humanitec_crds_already_installed
+}
+
+# Temporary, to be removed as soon as /keys is supported via Terraform.
+output "operator_public_key" {
+  value     = module.base.operator_public_key
+  sensitive = true
 }

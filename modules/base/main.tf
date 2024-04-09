@@ -11,6 +11,7 @@ resource "google_project_service" "apis" {
     "containeranalysis.googleapis.com",
     "anthos.googleapis.com",
     "mesh.googleapis.com",
+    "secretmanager.googleapis.com",
   ])
 
   service = each.key
@@ -46,6 +47,15 @@ resource "tls_private_key" "agent" {
 }
 
 # ######################################################################
+# # Create a Private/Public key for the Humanitec Operator
+# ######################################################################
+
+resource "tls_private_key" "operator" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+# ######################################################################
 # # KUBERNETES MODULE: GKE
 # ######################################################################
 module "k8s" {
@@ -63,25 +73,32 @@ module "k8s" {
   gar_repository_id       = var.gar_repository_id
   gar_repository_location = var.gar_repository_location
 
-  agent_humanitec_org_id            = var.humanitec_org_id
+  humanitec_org_id                  = var.humanitec_org_id
   agent_private_key                 = tls_private_key.agent.private_key_pem
   agent_humanitec_egress_ip_address = google_compute_address.addr_nat.address
 
   istio_crds_already_installed = var.istio_crds_already_installed
+
+  operator_private_key = tls_private_key.operator.private_key_pem
+
+  humanitec_crds_already_installed = var.humanitec_crds_already_installed
 }
 
 # ######################################################################
 # # HUMANITEC MODULE
 # ######################################################################
 module "res_defs" {
-  source           = "../htc_res_defs"
-  k8s_cluster_name = module.k8s.cluster_name
-  k8s_loadbalancer = module.k8s.loadbalancer
-  k8s_region       = var.region
-  k8s_project_id   = var.project_id
-  k8s_credentials  = module.k8s.credentials
-  environment      = var.environment
-  environment_type = var.environment_type
-  prefix           = var.humanitec_prefix
-  agent_public_key = tls_private_key.agent.public_key_pem
+  source                                  = "../htc_res_defs"
+  k8s_cluster_name                        = module.k8s.cluster_name
+  k8s_loadbalancer                        = module.k8s.loadbalancer
+  k8s_region                              = var.region
+  k8s_project_id                          = var.project_id
+  k8s_credentials                         = module.k8s.credentials
+  environment                             = var.environment
+  environment_type                        = var.environment_type
+  prefix                                  = var.humanitec_prefix
+  agent_public_key                        = tls_private_key.agent.public_key_pem
+  humanitec_org_id                        = var.humanitec_org_id
+  operator_public_key                     = tls_private_key.operator.public_key_pem
+  default_secret_store_access_credentials = module.k8s.default_secret_store_access_credentials
 }

@@ -22,7 +22,7 @@ resource "kubernetes_config_map" "agent-configmap" {
   }
 
   data = {
-    ORGS = var.agent_humanitec_org_id
+    ORGS = var.humanitec_org_id
   }
 }
 
