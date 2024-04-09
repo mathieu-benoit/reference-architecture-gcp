@@ -120,5 +120,5 @@ resource "google_secret_manager_secret" "terraform_runner_cluster_credentials" {
 resource "google_secret_manager_secret_version" "terraform_runner_cluster_credentials" {
   secret = google_secret_manager_secret.terraform_runner_cluster_credentials.id
 
-  secret_data = "${base64decode(google_service_account_key.gke_cluster_access_key.private_key)}"
+  secret_data = base64decode(google_service_account_key.gke_cluster_access_key.private_key)
 }
