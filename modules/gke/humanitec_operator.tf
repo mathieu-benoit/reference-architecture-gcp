@@ -6,8 +6,9 @@ locals {
 resource "kubernetes_namespace" "humanitec_operator" {
   metadata {
     labels = {
-      "app.kubernetes.io/name"     = "humanitec-operator"
-      "app.kubernetes.io/instance" = "humanitec-operator"
+      "app.kubernetes.io/name"             = "humanitec-operator"
+      "app.kubernetes.io/instance"         = "humanitec-operator"
+      "pod-security.kubernetes.io/enforce" = "restricted"
     }
 
     name = "humanitec-operator"
