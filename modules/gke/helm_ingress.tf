@@ -1,7 +1,8 @@
 resource "kubernetes_namespace" "ingress_nginx" {
   metadata {
     labels = {
-      "istio-injection" = "enabled"
+      "pod-security.kubernetes.io/enforce" = "restricted"
+      "istio-injection"                    = "enabled"
     }
 
     name = "ingress-nginx"
