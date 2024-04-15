@@ -123,7 +123,6 @@ This reference architecture implementation uses Terraform. You will need to do t
    terraform plan \
       -var project_id=${GCP_PROJECT_ID} \
       -var humanitec_org_id=${HUMANITEC_ORG_ID} \
-      -var humanitec_token=${HUMANITEC_TOKEN} \
       -var region=${GCP_REGION} \
       -var istio_crds_already_installed=true \
       -var humanitec_crds_already_installed=true \
