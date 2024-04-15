@@ -43,12 +43,12 @@ resource "google_project_iam_custom_role" "secretmanager_readwrite" {
   title       = "Secret Reader/Writer"
   description = "Can create new and update existing secrets and read them"
   permissions = [
-      "secretmanager.secrets.create", 
-      "secretmanager.secrets.delete",
-      "secretmanager.secrets.update",
-      "secretmanager.versions.list",
-      "secretmanager.versions.add",
-      "secretmanager.versions.access"
+    "secretmanager.secrets.create",
+    "secretmanager.secrets.delete",
+    "secretmanager.secrets.update",
+    "secretmanager.versions.list",
+    "secretmanager.versions.add",
+    "secretmanager.versions.access"
   ]
 }
 resource "google_project_iam_member" "default_secret_store_access_from_operator" {
