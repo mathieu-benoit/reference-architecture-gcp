@@ -88,7 +88,7 @@ resource "kubernetes_manifest" "agent-deployment" {
                   }
                 },
               ]
-              "image" = "registry.humanitec.io/public/humanitec-agent-client:1.1.7"
+              "image" = "registry.humanitec.io/public/humanitec-agent-client:1.1.8"
               "name"  = "humanitec-agent"
               "resources" = {
                 "limits" = {
