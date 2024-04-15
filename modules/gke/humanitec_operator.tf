@@ -38,9 +38,22 @@ resource "kubernetes_secret" "humanitec_operator" {
 }
 
 # Access from Humanitec Operator by the default store
+resource "google_project_iam_custom_role" "secretmanager_readwrite" {
+  role_id     = "secretmanager.readwrite"
+  title       = "Secret Reader/Writer"
+  description = "Can create new and update existing secrets and read them"
+  permissions = [
+      "secretmanager.secrets.create", 
+      "secretmanager.secrets.delete",
+      "secretmanager.secrets.update",
+      "secretmanager.versions.list",
+      "secretmanager.versions.add",
+      "secretmanager.versions.access"
+  ]
+}
 resource "google_project_iam_member" "default_secret_store_access_from_operator" {
   project = var.project_id
-  role    = "roles/secretmanager.admin"
+  role    = "projects/${var.project_id}/roles/${google_project_iam_custom_role.secretmanager_readwrite.role_id}"
   member  = "principal://iam.googleapis.com/projects/${data.google_project.project.number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/${kubernetes_namespace.humanitec_operator.metadata.0.name}/sa/${local.humanitec_operator_k8s_sa_name}"
 }
 resource "kubernetes_manifest" "default_secret_store_access_from_operator" {
