@@ -223,12 +223,6 @@ Once you are finished with the reference architecture, you can remove all provis
 | humanitec\_crds\_already\_installed | Custom resource definitions must be applied before custom resources. | `bool` | `false` | no |
 | humanitec\_prefix | A prefix that will be attached to all IDs created in Humanitec. | `string` | `"htc-ref-arch-"` | no |
 | istio\_crds\_already\_installed | Custom resource definitions must be applied before custom resources. | `bool` | `false` | no |
-
-### Outputs
-
-| Name | Description |
-|------|-------------|
-| operator\_public\_key | Temporary, to be removed as soon as /keys is supported via Terraform. |
 <!-- END_TF_DOCS -->
 
 ## Deploy a Workload

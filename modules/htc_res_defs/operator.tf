@@ -19,3 +19,7 @@ resource "humanitec_secretstore" "primary" {
     project_id = var.k8s_project_id
   }
 }
+
+resource "humanitec_key" "operator" {
+  key = var.operator_public_key
+}
