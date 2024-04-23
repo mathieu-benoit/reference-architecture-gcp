@@ -18,9 +18,9 @@ resource "kubernetes_namespace" "humanitec_operator" {
 resource "helm_release" "humanitec_operator" {
   name       = "humanitec-operator"
   namespace  = kubernetes_namespace.humanitec_operator.metadata.0.name
-  repository = "oci://registry.humanitec.io/charts"
+  repository = "oci://ghcr.io/humanitec/charts"
   chart      = "humanitec-operator"
-  version    = "0.1.8"
+  version    = "0.1.9"
   wait       = true
   timeout    = 300
 }
