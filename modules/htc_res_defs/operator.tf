@@ -6,9 +6,6 @@ resource "humanitec_secretstore" "default" {
   id = "default"
   gcpsm = {
     project_id = var.k8s_project_id
-    auth = {
-      secret_access_key = "${var.default_secret_store_access_credentials}"
-    }
   }
 }
 

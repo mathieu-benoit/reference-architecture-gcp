@@ -78,19 +78,10 @@ resource "kubernetes_manifest" "default_secret_store_access_from_operator" {
 }
 
 # Access from Humanitec Orchestrator by the default store
-resource "google_service_account" "default_secret_store_access_from_orchestrator" {
-  account_id  = "${var.cluster_name}-store"
-  description = "Account used by Humanitec to access the default Secret store."
-}
 resource "google_project_iam_member" "default_secret_store_access_from_orchestrator" {
   project = var.project_id
   role    = "roles/secretmanager.admin"
-  member  = "serviceAccount:${google_service_account.default_secret_store_access_from_orchestrator.email}"
-}
-resource "google_service_account_key" "default_secret_store_access_from_orchestrator" {
-  service_account_id = google_service_account.default_secret_store_access_from_orchestrator.name
-
-  depends_on = [google_project_iam_member.default_secret_store_access_from_orchestrator]
+  member  = "principal://iam.googleapis.com/projects/${data.google_project.project.number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/${kubernetes_namespace.humanitec_operator.metadata.0.name}/sa/${local.humanitec_operator_k8s_sa_name}"
 }
 
 # Access from Humanitec Operator by the primary store

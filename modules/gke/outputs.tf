@@ -32,8 +32,3 @@ output "cluster_name" {
 output "gar_repository_id" {
   value = var.gar_repository_id == null ? "" : google_artifact_registry_repository.repo[0].id
 }
-
-output "default_secret_store_access_credentials" {
-  value     = base64decode(google_service_account_key.default_secret_store_access_from_orchestrator.private_key)
-  sensitive = true
-}

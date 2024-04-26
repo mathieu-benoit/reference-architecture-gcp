@@ -46,8 +46,3 @@ variable "operator_public_key" {
   type        = string
   sensitive   = true
 }
-variable "default_secret_store_access_credentials" {
-  type        = string
-  description = "The credentials used to establish a connection to the default Secret store."
-  sensitive   = true
-}
