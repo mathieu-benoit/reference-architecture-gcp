@@ -1,3 +1,9 @@
+data "kubernetes_service" "kubernetes" {
+  metadata {
+    name = "kubernetes"
+  }
+}
+
 resource "kubernetes_namespace" "ingress_nginx" {
   metadata {
     labels = {
@@ -14,7 +20,7 @@ resource "helm_release" "ingress_nginx" {
   namespace  = kubernetes_namespace.ingress_nginx.metadata.0.name
   repository = "https://kubernetes.github.io/ingress-nginx"
   chart      = "ingress-nginx"
-  version    = "4.10.0"
+  version    = "4.10.1"
   wait       = true
   timeout    = 300
 
@@ -68,6 +74,12 @@ resource "helm_release" "ingress_nginx" {
     type  = "string"
     name  = "controller.podAnnotations.traffic\\.sidecar\\.istio\\.io/excludeInboundPorts"
     value = "80\\,443"
+  }
+
+  set {
+    type  = "string"
+    name  = "controller.podAnnotations.traffic\\.sidecar\\.istio\\.io/excludeOutboundIPRanges"
+    value = "${data.kubernetes_service.kubernetes.spec.0.cluster_ip}/32"
   }
 }
 
