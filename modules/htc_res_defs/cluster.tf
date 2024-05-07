@@ -1,9 +1,12 @@
 resource "humanitec_resource_account" "cluster_account" {
   id   = "${var.prefix}cluster"
   name = "${var.prefix}cluster"
-  type = "gcp"
+  type = "gcp-identity"
 
-  credentials = var.k8s_credentials
+  credentials = jsonencode({
+    gcp_service_account = var.cluster_access_gsa_email
+    gcp_audience        = "//iam.googleapis.com/${var.cluster_access_wi_pool_provider_name}"
+  })
 }
 
 resource "humanitec_resource_definition" "k8s_cluster" {

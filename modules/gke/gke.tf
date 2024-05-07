@@ -134,11 +134,11 @@ resource "google_container_node_pool" "gke_node_pool" {
   }
 }
 
+# GSA for the GKE nodes
 resource "google_service_account" "gke_nodes" {
   account_id  = "${var.cluster_name}-nodes-sa"
   description = "Account used by the GKE nodes"
 }
-
 resource "google_project_iam_member" "gke_nodes" {
   for_each = toset([
     "roles/logging.logWriter",
@@ -152,18 +152,35 @@ resource "google_project_iam_member" "gke_nodes" {
   member  = "serviceAccount:${google_service_account.gke_nodes.email}"
 }
 
+# GSA for the GKE cluster access from Humanitec
 resource "google_service_account" "gke_cluster_access" {
   account_id  = var.cluster_name
   description = "Account used by Humanitec to access the GKE cluster"
 }
-
 resource "google_project_iam_member" "gke_admin" {
   project = var.project_id
   role    = "roles/container.developer"
   member  = "serviceAccount:${google_service_account.gke_cluster_access.email}"
 }
-
-# https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_service_account_key#private_key
+resource "google_iam_workload_identity_pool" "gke_cluster_access" {
+  workload_identity_pool_id = var.cluster_name
+}
+resource "google_iam_workload_identity_pool_provider" "gke_cluster_access" {
+  workload_identity_pool_id          = google_iam_workload_identity_pool.gke_cluster_access.workload_identity_pool_id
+  workload_identity_pool_provider_id = var.cluster_name
+  attribute_mapping = {
+    "google.subject" = "assertion.sub"
+  }
+  oidc {
+    issuer_uri = "https://idtoken.humanitec.io"
+  }
+}
+resource "google_service_account_iam_member" "gke_cluster_access" {
+  service_account_id = google_service_account.gke_cluster_access.name
+  role               = "roles/iam.workloadIdentityUser"
+  member             = "principal://iam.googleapis.com/${google_iam_workload_identity_pool.gke_cluster_access.name}/subject/${var.humanitec_org_id}/${var.cluster_name}"
+}
+# This GSA key is only used by the TF runner until it will support the dynamic Cloud Account.
 resource "google_service_account_key" "gke_cluster_access_key" {
   service_account_id = google_service_account.gke_cluster_access.name
 

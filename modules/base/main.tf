@@ -88,16 +88,18 @@ module "k8s" {
 # # HUMANITEC MODULE
 # ######################################################################
 module "res_defs" {
-  source              = "../htc_res_defs"
-  k8s_cluster_name    = module.k8s.cluster_name
-  k8s_loadbalancer    = module.k8s.loadbalancer
-  k8s_region          = var.region
-  k8s_project_id      = var.project_id
-  k8s_credentials     = module.k8s.credentials
-  environment         = var.environment
-  environment_type    = var.environment_type
-  prefix              = var.humanitec_prefix
-  agent_public_key    = tls_private_key.agent.public_key_pem
-  humanitec_org_id    = var.humanitec_org_id
-  operator_public_key = tls_private_key.operator.public_key_pem
+  source                               = "../htc_res_defs"
+  k8s_cluster_name                     = module.k8s.cluster_name
+  k8s_loadbalancer                     = module.k8s.loadbalancer
+  k8s_region                           = var.region
+  k8s_project_id                       = var.project_id
+  k8s_credentials                      = module.k8s.credentials
+  environment                          = var.environment
+  environment_type                     = var.environment_type
+  prefix                               = var.humanitec_prefix
+  agent_public_key                     = tls_private_key.agent.public_key_pem
+  humanitec_org_id                     = var.humanitec_org_id
+  operator_public_key                  = tls_private_key.operator.public_key_pem
+  cluster_access_gsa_email             = module.k8s.cluster_access_gsa_email
+  cluster_access_wi_pool_provider_name = module.k8s.cluster_access_wi_pool_provider_name
 }

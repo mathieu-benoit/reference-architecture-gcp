@@ -46,3 +46,13 @@ variable "operator_public_key" {
   type        = string
   sensitive   = true
 }
+variable "cluster_access_gsa_email" {
+  description = "The email of the GSA to access the GKE cluster from Humanitec."
+  type        = string
+  sensitive   = true
+}
+variable "cluster_access_wi_pool_provider_name" {
+  description = "The Workload Identity Pool Provider name to access the GKE cluster from Humanitec."
+  type        = string
+  sensitive   = true
+}

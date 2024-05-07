@@ -32,3 +32,13 @@ output "cluster_name" {
 output "gar_repository_id" {
   value = var.gar_repository_id == null ? "" : google_artifact_registry_repository.repo[0].id
 }
+
+output "cluster_access_gsa_email" {
+  value     = google_service_account.gke_cluster_access.email
+  sensitive = true
+}
+
+output "cluster_access_wi_pool_provider_name" {
+  value     = google_iam_workload_identity_pool_provider.gke_cluster_access.name
+  sensitive = true
+}
