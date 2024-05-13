@@ -166,6 +166,7 @@ resource "google_iam_workload_identity_pool" "gke_cluster_access" {
   workload_identity_pool_id = var.cluster_name
 }
 resource "google_iam_workload_identity_pool_provider" "gke_cluster_access" {
+  display_name                       = var.cluster_name
   workload_identity_pool_id          = google_iam_workload_identity_pool.gke_cluster_access.workload_identity_pool_id
   workload_identity_pool_provider_id = var.cluster_name
   attribute_mapping = {
