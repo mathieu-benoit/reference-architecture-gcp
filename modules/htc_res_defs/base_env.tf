@@ -30,6 +30,12 @@ terraform {
         # FIXME - hard coded for now, needs to be passed as module's var.
         bucket  = "htc-ref-arch-cluster-terraform-runner-state"
     }
+    #backend "kubernetes" {
+    #  secret_suffix    = "state"
+    #  in_cluster_config = true
+    #  # FIXME - hard coded for now, needs to be passed as module's var.
+    #  namespace = "humanitec-terraform-runner"
+    #}
 }
 output "output" {
     value = "simple-test-for-tf-runner"

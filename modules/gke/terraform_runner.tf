@@ -39,6 +39,7 @@ resource "kubernetes_role" "secrets" {
   }
 }
 
+# Need leases if you use backend "kubernetes"
 resource "kubernetes_role" "leases" {
   metadata {
     name      = "leases"
