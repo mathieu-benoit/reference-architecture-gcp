@@ -63,23 +63,6 @@ resource "kubernetes_role_binding" "terraform_runner" {
   }
 }
 
-resource "kubernetes_role_binding" "leases" {
-  metadata {
-    name      = "leases"
-    namespace = kubernetes_namespace.terraform_runner.metadata.0.name
-  }
-  role_ref {
-    api_group = "rbac.authorization.k8s.io"
-    kind      = "Role"
-    name      = "leases"
-  }
-  subject {
-    kind      = "ServiceAccount"
-    name      = kubernetes_service_account.terraform_runner.metadata.0.name
-    namespace = kubernetes_namespace.terraform_runner.metadata.0.name
-  }
-}
-
 # TF state
 resource "google_storage_bucket" "bucket" {
   name          = "${var.cluster_name}-terraform-runner-state"
