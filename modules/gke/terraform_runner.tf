@@ -1,4 +1,4 @@
-resource "kubernetes_namespace" "terraform-runner" {
+resource "kubernetes_namespace" "terraform_runner" {
   metadata {
     labels = {
       "app.kubernetes.io/name"             = "humanitec-terraform-runner"
@@ -10,7 +10,7 @@ resource "kubernetes_namespace" "terraform-runner" {
   }
 }
 
-resource "kubernetes_service_account" "terraform-runner" {
+resource "kubernetes_service_account" "terraform_runner" {
   metadata {
     annotations = {
       "iam.gke.io/gcp-service-account" = google_service_account.terraform_runner.email
@@ -22,14 +22,14 @@ resource "kubernetes_service_account" "terraform-runner" {
     }
 
     name      = "humanitec-terraform-runner"
-    namespace = kubernetes_namespace.terraform-runner.metadata.0.name
+    namespace = kubernetes_namespace.terraform_runner.metadata.0.name
   }
 }
 
-resource "kubernetes_role" "secrets" {
+resource "kubernetes_role" "terraform_runner" {
   metadata {
-    name      = "secrets"
-    namespace = kubernetes_namespace.terraform-runner.metadata.0.name
+    name      = "terraform_runner"
+    namespace = kubernetes_namespace.terraform_runner.metadata.0.name
   }
 
   rule {
@@ -37,15 +37,8 @@ resource "kubernetes_role" "secrets" {
     resources  = ["secrets"]
     verbs      = ["create", "delete", "get", "list", "update", "deletecollection"]
   }
-}
 
-# Need leases if you use backend "kubernetes"
-resource "kubernetes_role" "leases" {
-  metadata {
-    name      = "leases"
-    namespace = kubernetes_namespace.terraform-runner.metadata.0.name
-  }
-
+  # Need leases if you use backend "kubernetes"
   rule {
     api_groups = ["coordination.k8s.io"]
     resources  = ["leases"]
@@ -53,27 +46,27 @@ resource "kubernetes_role" "leases" {
   }
 }
 
-resource "kubernetes_role_binding" "secrets" {
+resource "kubernetes_role_binding" "terraform_runner" {
   metadata {
-    name      = "secrets"
-    namespace = kubernetes_namespace.terraform-runner.metadata.0.name
+    name      = "terraform_runner"
+    namespace = kubernetes_namespace.terraform_runner.metadata.0.name
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "Role"
-    name      = "secrets"
+    name      = kubernetes_role.terraform_runner.metadata.0.name
   }
   subject {
     kind      = "ServiceAccount"
-    name      = kubernetes_service_account.terraform-runner.metadata.0.name
-    namespace = kubernetes_namespace.terraform-runner.metadata.0.name
+    name      = kubernetes_service_account.terraform_runner.metadata.0.name
+    namespace = kubernetes_namespace.terraform_runner.metadata.0.name
   }
 }
 
 resource "kubernetes_role_binding" "leases" {
   metadata {
     name      = "leases"
-    namespace = kubernetes_namespace.terraform-runner.metadata.0.name
+    namespace = kubernetes_namespace.terraform_runner.metadata.0.name
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
@@ -82,8 +75,8 @@ resource "kubernetes_role_binding" "leases" {
   }
   subject {
     kind      = "ServiceAccount"
-    name      = kubernetes_service_account.terraform-runner.metadata.0.name
-    namespace = kubernetes_namespace.terraform-runner.metadata.0.name
+    name      = kubernetes_service_account.terraform_runner.metadata.0.name
+    namespace = kubernetes_namespace.terraform_runner.metadata.0.name
   }
 }
 
@@ -107,7 +100,7 @@ resource "google_project_iam_member" "terraform_runner" {
 resource "google_service_account_iam_member" "terraform_runner_wi" {
   service_account_id = google_service_account.terraform_runner.name
   role               = "roles/iam.workloadIdentityUser"
-  member             = "serviceAccount:${var.project_id}.svc.id.goog[${kubernetes_namespace.terraform-runner.metadata.0.name}/${kubernetes_service_account.terraform-runner.metadata.0.name}]"
+  member             = "serviceAccount:${var.project_id}.svc.id.goog[${kubernetes_namespace.terraform_runner.metadata.0.name}/${kubernetes_service_account.terraform_runner.metadata.0.name}]"
 }
 
 # Credentials of the GKE cluster for the TF runner
