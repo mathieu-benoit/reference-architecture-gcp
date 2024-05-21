@@ -15,7 +15,7 @@ resource "helm_release" "humanitec_agent" {
   namespace  = kubernetes_namespace.agent-namespace.metadata.0.name
   repository = "oci://ghcr.io/humanitec/charts"
   chart      = "humanitec-agent"
-  version    = "1.0.0"
+  version    = "1.0.1"
   wait       = true
   timeout    = 300
 
@@ -27,5 +27,10 @@ resource "helm_release" "humanitec_agent" {
   set {
     name  = "humanitec.privateKey"
     value = var.agent_private_key
+  }
+
+  set {
+    name  = "image.tag"
+    value = "1.2.1-distroless"
   }
 }
