@@ -12,11 +12,11 @@ resource "humanitec_resource_definition" "base_env" {
 
       runner = {
         cluster_type = "gke"
-        account = "${var.humanitec_org_id}/${humanitec_resource_account.cluster_account.id}"
+        account      = "${var.humanitec_org_id}/${humanitec_resource_account.cluster_account.id}"
         cluster = {
-          name         = var.k8s_cluster_name
-          project_id   = var.k8s_project_id
-          zone         = var.k8s_region
+          name       = var.k8s_cluster_name
+          project_id = var.k8s_project_id
+          zone       = var.k8s_region
         }
         # FIXME - hard coded for now, needs to be passed as module's var.
         service_account = "humanitec-terraform-runner"
