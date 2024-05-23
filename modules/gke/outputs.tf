@@ -20,11 +20,6 @@ output "zone" {
   value = var.region
 }
 
-output "credentials" {
-  value     = base64decode(google_service_account_key.gke_cluster_access_key.private_key)
-  sensitive = true
-}
-
 output "cluster_name" {
   value = google_container_cluster.gke.name
 }

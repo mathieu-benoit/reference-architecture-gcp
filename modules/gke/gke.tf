@@ -181,9 +181,3 @@ resource "google_service_account_iam_member" "gke_cluster_access" {
   role               = "roles/iam.workloadIdentityUser"
   member             = "principal://iam.googleapis.com/${google_iam_workload_identity_pool.gke_cluster_access.name}/subject/${var.humanitec_org_id}/${var.cluster_name}"
 }
-# This GSA key is only used by the TF runner until it will support the dynamic Cloud Account.
-resource "google_service_account_key" "gke_cluster_access_key" {
-  service_account_id = google_service_account.gke_cluster_access.name
-
-  depends_on = [google_project_iam_member.gke_admin]
-}

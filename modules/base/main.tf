@@ -93,7 +93,6 @@ module "res_defs" {
   k8s_loadbalancer                     = module.k8s.loadbalancer
   k8s_region                           = var.region
   k8s_project_id                       = var.project_id
-  k8s_credentials                      = module.k8s.credentials
   environment                          = var.environment
   environment_type                     = var.environment_type
   prefix                               = var.humanitec_prefix

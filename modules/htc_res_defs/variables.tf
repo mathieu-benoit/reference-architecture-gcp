@@ -15,10 +15,6 @@ variable "k8s_region" {
   type        = string
   description = "The region the cluster is in."
 }
-variable "k8s_credentials" {
-  type        = string
-  description = "The credentials used to establish a connection to the cluster."
-}
 variable "environment" {
   type        = string
   description = "The environment to use for matching criteria."

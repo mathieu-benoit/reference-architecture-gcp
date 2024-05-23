@@ -85,17 +85,3 @@ resource "google_service_account_iam_member" "terraform_runner_wi" {
   role               = "roles/iam.workloadIdentityUser"
   member             = "serviceAccount:${var.project_id}.svc.id.goog[${kubernetes_namespace.terraform_runner.metadata.0.name}/${kubernetes_service_account.terraform_runner.metadata.0.name}]"
 }
-
-# Credentials of the GKE cluster for the TF runner
-resource "google_secret_manager_secret" "terraform_runner_cluster_credentials" {
-  secret_id = "terraform-runner-cluster-credentials"
-
-  replication {
-    auto {}
-  }
-}
-resource "google_secret_manager_secret_version" "terraform_runner_cluster_credentials" {
-  secret = google_secret_manager_secret.terraform_runner_cluster_credentials.id
-
-  secret_data = base64decode(google_service_account_key.gke_cluster_access_key.private_key)
-}
