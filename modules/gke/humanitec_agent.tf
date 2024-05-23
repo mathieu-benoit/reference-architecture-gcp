@@ -31,6 +31,6 @@ resource "helm_release" "humanitec_agent" {
 
   set {
     name  = "image.tag"
-    value = "1.2.1-distroless"
+    value = "1.3.0-distroless"
   }
 }
