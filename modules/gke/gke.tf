@@ -157,9 +157,58 @@ resource "google_service_account" "gke_cluster_access" {
   account_id  = var.cluster_name
   description = "Account used by Humanitec to access the GKE cluster"
 }
-resource "google_project_iam_member" "gke_admin" {
+resource "google_project_iam_custom_role" "gke_cluster_access" {
+  role_id     = "humanitec.gkeaccess"
+  title       = "Humanitec GKE access"
+  description = "Can deploy Kubernetes resources from Humanitec to GKE cluster."
+  permissions = [
+    # GKE get credentials
+    "container.clusters.get",
+    "container.clusters.getCredentials",
+    # Namespaces management
+    "container.namespaces.get",
+    "container.namespaces.create",
+    "container.namespaces.update",
+    "container.namespaces.delete",
+    # Humanitec's CRDs: resources, workloads, secretmappings, and workloadpatches (humanitec.io).
+    "container.thirdPartyObjects.get",
+    "container.thirdPartyObjects.list",
+    "container.thirdPartyObjects.create",
+    "container.thirdPartyObjects.update",
+    "container.thirdPartyObjects.delete",
+    # Deployment / Workload Status in UI
+    "container.deployments.list",
+    "container.deployments.get",
+    "container.deployments.getStatus",
+    "container.daemonSets.list",
+    "container.daemonSets.getStatus",
+    "container.statefulSets.list",
+    "container.statefulSets.getStatus",
+    "container.jobs.list",
+    "container.jobs.get",
+    "container.jobs.getStatus",
+    "container.pods.list",
+    "container.pods.get",
+    "container.pods.getStatus",
+    "container.replicaSets.list",
+    "container.replicaSets.get",
+    "container.replicaSets.getStatus",
+    # Container's logs in UI
+    "container.pods.getLogs",
+    "container.pods.attach",
+    # To get the active resources (resources outputs)
+    "container.configMaps.get",
+    # For private TF runner (but not needed if self-hosted TF Driver)
+    "container.secrets.get",
+    "container.secrets.create",
+    "container.secrets.delete",
+    "container.jobs.create",
+    "container.jobs.delete"
+  ]
+}
+resource "google_project_iam_member" "gke_cluster_access" {
   project = var.project_id
-  role    = "roles/container.developer"
+  role    = "projects/${var.project_id}/roles/${google_project_iam_custom_role.gke_cluster_access.role_id}"
   member  = "serviceAccount:${google_service_account.gke_cluster_access.email}"
 }
 resource "google_iam_workload_identity_pool" "gke_cluster_access" {
