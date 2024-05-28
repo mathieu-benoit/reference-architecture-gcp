@@ -179,23 +179,16 @@ resource "google_project_iam_custom_role" "gke_cluster_access" {
     # Deployment / Workload Status in UI
     "container.deployments.list",
     "container.deployments.get",
-    "container.deployments.getStatus",
     "container.daemonSets.list",
-    "container.daemonSets.getStatus",
     "container.statefulSets.list",
-    "container.statefulSets.getStatus",
     "container.jobs.list",
     "container.jobs.get",
-    "container.jobs.getStatus",
     "container.pods.list",
     "container.pods.get",
-    "container.pods.getStatus",
     "container.replicaSets.list",
     "container.replicaSets.get",
-    "container.replicaSets.getStatus",
     # Container's logs in UI
     "container.pods.getLogs",
-    "container.pods.attach",
     # To get the active resources (resources outputs)
     "container.configMaps.get",
     # For private TF runner (but not needed if self-hosted TF Driver)
