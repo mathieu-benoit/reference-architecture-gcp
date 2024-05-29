@@ -164,40 +164,85 @@ resource "google_project_iam_custom_role" "gke_cluster_access" {
   permissions = [
     # GKE get credentials
     "container.clusters.get",
-    "container.clusters.getCredentials",
-    # Namespaces management
-    "container.namespaces.get",
-    "container.namespaces.create",
-    "container.namespaces.update",
-    "container.namespaces.delete",
-    # Humanitec's CRDs: resources, workloads, secretmappings, and workloadpatches (humanitec.io).
-    "container.thirdPartyObjects.get",
-    "container.thirdPartyObjects.list",
-    "container.thirdPartyObjects.create",
-    "container.thirdPartyObjects.update",
-    "container.thirdPartyObjects.delete",
-    # Deployment / Workload Status in UI
-    "container.deployments.list",
-    "container.deployments.get",
-    "container.daemonSets.list",
-    "container.statefulSets.list",
-    "container.jobs.list",
-    "container.jobs.get",
-    "container.pods.list",
-    "container.pods.get",
-    "container.replicaSets.list",
-    "container.replicaSets.get",
-    # Container's logs in UI
-    "container.pods.getLogs",
-    # To get the active resources (resources outputs)
-    "container.configMaps.get",
-    # For private TF runner (but not needed if self-hosted TF Driver)
-    "container.secrets.get",
-    "container.secrets.create",
-    "container.secrets.delete",
-    "container.jobs.create",
-    "container.jobs.delete"
+    "container.clusters.getCredentials"
   ]
+}
+resource "kubernetes_cluster_role" "humanitec_deploy_access" {
+  metadata {
+    name = "humanitec-deploy-access"
+  }
+
+  # Namespaces management
+  rule {
+    api_groups = [""]
+    resources  = ["namespaces"]
+    verbs      = ["create", "get", "list", "update", "patch", "delete"]
+  }
+
+  # Humanitec's CRs management.
+  rule {
+    api_groups = ["humanitec.io"]
+    resources  = ["resources", "secretmappings", "workloadpatches", "workloads"]
+    verbs      = ["create", "get", "list", "update", "patch", "delete", "watch"]
+  }
+
+  # Deployment / Workload Status in UI
+  rule {
+    api_groups = ["batch"]
+    resources  = ["jobs"]
+    verbs      = ["get", "list"]
+  }
+  rule {
+    api_groups = ["apps"]
+    resources  = ["deployments", "statefulsets", "replicasets", "daemonsets"]
+    verbs      = ["get", "list"]
+  }
+  rule {
+    api_groups = [""]
+    resources  = ["pods"]
+    verbs      = ["get", "list"]
+  }
+
+  # Container's logs in UI
+  rule {
+    api_groups = [""]
+    resources  = ["pods/log"]
+    verbs      = ["get", "list"]
+  }
+
+  # To get the active resources (resources outputs)
+  rule {
+    api_groups = [""]
+    resources  = ["configmaps"]
+    verbs      = ["get"]
+  }
+
+  # For private TF runner (but not needed if self-hosted TF Driver)
+  rule {
+    api_groups = ["batch"]
+    resources  = ["jobs"]
+    verbs      = ["create", "delete"]
+  }
+  rule {
+    api_groups = [""]
+    resources  = ["secrets"]
+    verbs      = ["get", "create", "delete"]
+  }
+}
+resource "kubernetes_cluster_role_binding" "humanitec_deploy_access" {
+  metadata {
+    name = "humanitec-deploy-access"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = kubernetes_cluster_role.humanitec_deploy_access.metadata.0.name
+  }
+  subject {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "User"
+    name      = google_service_account.gke_cluster_access.unique_id
+  }
 }
 resource "google_project_iam_member" "gke_cluster_access" {
   project = var.project_id
