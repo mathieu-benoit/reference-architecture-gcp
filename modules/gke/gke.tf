@@ -162,9 +162,7 @@ resource "google_project_iam_custom_role" "gke_cluster_access" {
   title       = "Humanitec GKE access"
   description = "Can deploy Kubernetes resources from Humanitec to GKE cluster."
   permissions = [
-    # GKE get credentials
-    "container.clusters.get",
-    "container.clusters.getCredentials"
+    "container.clusters.get"
   ]
 }
 resource "kubernetes_cluster_role" "humanitec_deploy_access" {
