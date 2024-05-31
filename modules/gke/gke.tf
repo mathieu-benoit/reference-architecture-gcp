@@ -208,6 +208,13 @@ resource "kubernetes_cluster_role" "humanitec_deploy_access" {
     verbs      = ["get", "list"]
   }
 
+  # Pause Environments
+  rule {
+    api_groups = ["apps"]
+    resources  = ["deployments/scale"]
+    verbs      = ["update"]
+  }
+
   # To get the active resources (resources outputs)
   rule {
     api_groups = [""]
