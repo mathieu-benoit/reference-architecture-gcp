@@ -38,7 +38,7 @@ resource "helm_release" "humanitec_operator" {
     name  = "controllerManager.manager.image.repository"
     value = "ghcr.io/humanitec/operator"
   }
-  
+
   set {
     name  = "controllerManager.manager.image.tag"
     value = "0.13.0"
