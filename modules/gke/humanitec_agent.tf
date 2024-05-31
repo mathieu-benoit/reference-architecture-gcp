@@ -30,6 +30,11 @@ resource "helm_release" "humanitec_agent" {
   }
 
   set {
+    name  = "image.repository"
+    value = "ghcr.io/humanitec/agent"
+  }
+
+  set {
     name  = "image.tag"
     value = "1.4.0"
   }
