@@ -181,7 +181,7 @@ resource "kubernetes_cluster_role" "humanitec_deploy_access" {
   rule {
     api_groups = ["humanitec.io"]
     resources  = ["resources", "secretmappings", "workloadpatches", "workloads"]
-    verbs      = ["create", "get", "list", "update", "patch", "delete", "watch"]
+    verbs      = ["create", "get", "list", "update", "patch", "delete", "deletecollection", "watch"]
   }
 
   # Deployment / Workload Status in UI
@@ -231,7 +231,7 @@ resource "kubernetes_cluster_role" "humanitec_deploy_access" {
   rule {
     api_groups = [""]
     resources  = ["secrets"]
-    verbs      = ["get", "create", "delete"]
+    verbs      = ["get", "create", "delete", "deletecollection"]
   }
 }
 resource "kubernetes_cluster_role_binding" "humanitec_deploy_access" {
