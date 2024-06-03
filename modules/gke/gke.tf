@@ -221,6 +221,27 @@ resource "kubernetes_cluster_role" "humanitec_deploy_access" {
     resources  = ["configmaps"]
     verbs      = ["get"]
   }
+}
+resource "kubernetes_cluster_role_binding" "humanitec_deploy_access" {
+  metadata {
+    name = "humanitec-deploy-access"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = kubernetes_cluster_role.humanitec_deploy_access.metadata.0.name
+  }
+  subject {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "User"
+    name      = google_service_account.gke_cluster_access.unique_id
+  }
+}
+resource "kubernetes_role" "humanitec_private_tf_runner" {
+  metadata {
+    name      = "humanitec-private-tf-runner"
+    namespace = kubernetes_namespace.terraform_runner.metadata.0.name
+  }
 
   # For private TF runner (but not needed if self-hosted TF Driver)
   rule {
@@ -234,14 +255,15 @@ resource "kubernetes_cluster_role" "humanitec_deploy_access" {
     verbs      = ["get", "create", "delete", "deletecollection"]
   }
 }
-resource "kubernetes_cluster_role_binding" "humanitec_deploy_access" {
+resource "kubernetes_role_binding" "humanitec_private_tf_runner" {
   metadata {
-    name = "humanitec-deploy-access"
+    name      = "humanitec-private-tf-runner"
+    namespace = kubernetes_namespace.terraform_runner.metadata.0.name
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
-    kind      = "ClusterRole"
-    name      = kubernetes_cluster_role.humanitec_deploy_access.metadata.0.name
+    kind      = "Role"
+    name      = kubernetes_role.humanitec_private_tf_runner.metadata.0.name
   }
   subject {
     api_group = "rbac.authorization.k8s.io"
