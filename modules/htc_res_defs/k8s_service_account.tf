@@ -8,7 +8,7 @@ resource "humanitec_resource_definition" "k8s_service_account" {
     values_string = jsonencode({
       templates = {
         init      = <<EOL
-name: {{ index (regexSplit "\\." "$${context.res.id}" -1) 1 }}
+name: {{ index (splitList "." "$${context.res.id}") 1 }}
 EOL
         manifests = <<EOL
 service-account.yaml:
