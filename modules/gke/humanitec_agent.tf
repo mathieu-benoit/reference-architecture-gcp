@@ -20,6 +20,11 @@ resource "helm_release" "humanitec_agent" {
   timeout    = 300
 
   set {
+    name  = "image.tag"
+    value = "1.7.0"
+  }
+
+  set {
     name  = "humanitec.org"
     value = var.humanitec_org_id
   }
@@ -32,10 +37,5 @@ resource "helm_release" "humanitec_agent" {
   set {
     name  = "image.repository"
     value = "ghcr.io/humanitec/agent"
-  }
-
-  set {
-    name  = "image.tag"
-    value = "1.6.0"
   }
 }

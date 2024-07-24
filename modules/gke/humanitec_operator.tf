@@ -20,9 +20,14 @@ resource "helm_release" "humanitec_operator" {
   namespace  = kubernetes_namespace.humanitec_operator.metadata.0.name
   repository = "oci://ghcr.io/humanitec/charts"
   chart      = "humanitec-operator"
-  version    = "0.2.8"
+  version    = "0.2.9"
   wait       = true
   timeout    = 300
+
+  set {
+    name  = "controllerManager.manager.image.tag"
+    value = "0.15.2"
+  }
 
   set {
     name  = "controllerManager.kubeRbacProxy.image.repository"
@@ -37,11 +42,6 @@ resource "helm_release" "humanitec_operator" {
   set {
     name  = "controllerManager.manager.image.repository"
     value = "ghcr.io/humanitec/operator"
-  }
-
-  set {
-    name  = "controllerManager.manager.image.tag"
-    value = "0.15.0"
   }
 }
 
