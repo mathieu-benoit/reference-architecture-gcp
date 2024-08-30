@@ -234,7 +234,7 @@ resource "kubernetes_cluster_role_binding" "humanitec_deploy_access" {
   subject {
     api_group = "rbac.authorization.k8s.io"
     kind      = "User"
-    name      = google_service_account.gke_cluster_access.unique_id
+    name      = google_service_account.gke_cluster_access.email
   }
 }
 resource "kubernetes_role" "humanitec_private_tf_runner" {
@@ -268,7 +268,7 @@ resource "kubernetes_role_binding" "humanitec_private_tf_runner" {
   subject {
     api_group = "rbac.authorization.k8s.io"
     kind      = "User"
-    name      = google_service_account.gke_cluster_access.unique_id
+    name      = google_service_account.gke_cluster_access.email
   }
 }
 resource "google_project_iam_member" "gke_cluster_access" {
