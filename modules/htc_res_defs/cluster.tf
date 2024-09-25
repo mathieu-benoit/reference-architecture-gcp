@@ -22,6 +22,7 @@ resource "humanitec_resource_definition" "k8s_cluster" {
       "loadbalancer" = var.k8s_loadbalancer
       "project_id"   = var.k8s_project_id
       "zone"         = var.k8s_region
+      "internal_ip"  = true
     }),
     secrets_string = jsonencode({
       "agent_url" = "$${resources['agent.default#agent'].outputs.url}"
