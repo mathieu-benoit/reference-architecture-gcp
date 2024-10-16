@@ -23,11 +23,18 @@ provider "humanitec" {
 
 
 module "base" {
-  source           = "./modules/base"
-  project_id       = var.project_id
-  region           = var.region
-  humanitec_org_id = var.humanitec_org_id
-  humanitec_prefix = var.humanitec_prefix
-  environment      = var.environment
-  environment_type = var.environment_type
+  source                  = "./modules/base"
+  project_id              = var.project_id
+  region                  = var.region
+  humanitec_org_id        = var.humanitec_org_id
+  humanitec_prefix        = var.humanitec_prefix
+  environment             = var.environment
+  environment_type        = var.environment_type
+  gar_repository_id       = var.gar_repository_id
+  gar_repository_location = var.region
+  gke_release_channel     = var.gke_release_channel
+
+  istio_crds_already_installed = var.istio_crds_already_installed
+
+  humanitec_crds_already_installed = var.humanitec_crds_already_installed
 }

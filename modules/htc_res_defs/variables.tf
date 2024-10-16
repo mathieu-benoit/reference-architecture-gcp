@@ -15,10 +15,6 @@ variable "k8s_region" {
   type        = string
   description = "The region the cluster is in."
 }
-variable "k8s_credentials" {
-  type        = map(any)
-  description = "The credentials used to establish a connection to the cluster."
-}
 variable "environment" {
   type        = string
   description = "The environment to use for matching criteria."
@@ -31,4 +27,28 @@ variable "prefix" {
   type        = string
   description = "A prefix that will be attached to all IDs created in Humanitec."
   default     = ""
+}
+variable "agent_public_key" {
+  description = "The public key of the Agent."
+  type        = string
+  sensitive   = true
+}
+variable "humanitec_org_id" {
+  type        = string
+  description = "ID of the Humanitec Organization to associate resources with."
+}
+variable "operator_public_key" {
+  description = "The public key of the Operator."
+  type        = string
+  sensitive   = true
+}
+variable "cluster_access_gsa_email" {
+  description = "The email of the GSA to access the GKE cluster from Humanitec."
+  type        = string
+  sensitive   = true
+}
+variable "cluster_access_wi_pool_provider_name" {
+  description = "The Workload Identity Pool Provider name to access the GKE cluster from Humanitec."
+  type        = string
+  sensitive   = true
 }

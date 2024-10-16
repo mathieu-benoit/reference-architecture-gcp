@@ -70,3 +70,43 @@ variable "gar_repository_location" {
   type        = string
   default     = null
 }
+
+variable "humanitec_org_id" {
+  type        = string
+  description = "ID of the Humanitec Organization to associate resources with."
+}
+
+variable "agent_private_key" {
+  description = "The private key of the Agent."
+  type        = string
+  sensitive   = true
+}
+
+variable "agent_humanitec_egress_ip_address" {
+  description = "The IP address in egress of the Humanitec Agent accessing the GKE cluster."
+  type        = string
+}
+
+# Custom resource definitions must be applied before custom resources. 
+# This is because the provider queries the Kubernetes API for the OpenAPI specification for the resource supplied in the manifest attribute.
+# If the CRD doesn’t exist in the OpenAPI specification during plan time then Terraform can’t use it to create custom resources.
+variable "istio_crds_already_installed" {
+  description = "Custom resource definitions must be applied before custom resources."
+  type        = bool
+  default     = false
+}
+
+variable "operator_private_key" {
+  description = "The private key of the Operator."
+  type        = string
+  sensitive   = true
+}
+
+# Custom resource definitions must be applied before custom resources. 
+# This is because the provider queries the Kubernetes API for the OpenAPI specification for the resource supplied in the manifest attribute.
+# If the CRD doesn’t exist in the OpenAPI specification during plan time then Terraform can’t use it to create custom resources.
+variable "humanitec_crds_already_installed" {
+  description = "Custom resource definitions must be applied before custom resources."
+  type        = bool
+  default     = false
+}

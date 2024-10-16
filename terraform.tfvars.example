@@ -5,11 +5,23 @@ environment = ""
 # The environment type to associate the reference architecture with.
 environment_type = "development"
 
+# ID of the Google Artifact Registry repository.
+gar_repository_id = "htc-ref-arch-cluster"
+
+# GKE Release channel to be used
+gke_release_channel = "RAPID"
+
+# Custom resource definitions must be applied before custom resources.
+humanitec_crds_already_installed = false
+
 # ID of the Humanitec Organization to associate resources with.
 humanitec_org_id = ""
 
 # A prefix that will be attached to all IDs created in Humanitec.
 humanitec_prefix = "htc-ref-arch-"
+
+# Custom resource definitions must be applied before custom resources.
+istio_crds_already_installed = false
 
 # GCP Project ID to provision resources in.
 project_id = ""

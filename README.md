@@ -66,10 +66,18 @@ By default, the following will be provisioned:
 
 - VPC
 - GKE Autopilot Cluster
+- Google Artifact Registry
 - Google Service Account to access the cluster
 - Ingress NGINX in the cluster
+- Anthos Service Mesh (managed Istio control plane)
 - Resource Definitions in Humanitec for:
   - Kubernetes Cluster
+  - Namespace (add PSS/PSA label)
+  - Workload (add `securityContext`)
+  - Kubernetes Service Account (1 per Workload)
+  - Agent
+  - Private Terraform runner
+  - Operator with external Secrets in GSM
 
 ### Prerequisites
 
@@ -106,9 +114,20 @@ This reference architecture implementation uses Terraform. You will need to do t
 5. Run terraform:
 
    ```
-   terraform init
-   terraform plan
-   terraform apply
+   export GCP_PROJECT_ID=FIXME
+   export GCP_REGION=FIXME
+   export HUMANITEC_ORG_ID=FIXME
+
+   terraform init \
+      -upgrade
+   terraform plan \
+      -var project_id=${GCP_PROJECT_ID} \
+      -var humanitec_org_id=${HUMANITEC_ORG_ID} \
+      -var region=${GCP_REGION} \
+      -var istio_crds_already_installed=true \
+      -var humanitec_crds_already_installed=true \
+      -out out.tfplan
+   terraform apply out.tfplan
    ```
 
 #### Required input variables
@@ -199,8 +218,117 @@ Once you are finished with the reference architecture, you can remove all provis
 | region | GCP Region to provision resources in. | `string` | n/a | yes |
 | environment | The environment to associate the reference architecture with. | `string` | `null` | no |
 | environment\_type | The environment type to associate the reference architecture with. | `string` | `"development"` | no |
+| gar\_repository\_id | ID of the Google Artifact Registry repository. | `string` | `"htc-ref-arch-cluster"` | no |
+| gke\_release\_channel | GKE Release channel to be used | `string` | `"RAPID"` | no |
+| humanitec\_crds\_already\_installed | Custom resource definitions must be applied before custom resources. | `bool` | `false` | no |
 | humanitec\_prefix | A prefix that will be attached to all IDs created in Humanitec. | `string` | `"htc-ref-arch-"` | no |
+| istio\_crds\_already\_installed | Custom resource definitions must be applied before custom resources. | `bool` | `false` | no |
 <!-- END_TF_DOCS -->
+
+## Deploy a Workload
+
+### Simple Workload
+
+```bash
+APP=ref-arch
+ENVIRONMENT=development
+
+humctl create app ${APP}
+
+cat <<EOF > score.yaml
+apiVersion: score.dev/v1b1
+metadata:
+  name: ref-arch
+containers:
+  ref-arch:
+    image: .
+EOF
+
+score-humanitec delta \
+    --retry \
+    --deploy \
+    --token ${HUMANITEC_TOKEN} \
+    --org ${HUMANITEC_ORG} \
+    --app ${APP} \
+    --env ${ENVIRONMENT} \
+    -f score.yaml \
+    --image ghcr.io/mathieu-benoit/my-sample-app:latest
+```
+
+### Workload with GCS
+
+```bash
+cat <<EOF > gcs.yaml
+apiVersion: entity.humanitec.io/v1b1
+kind: Definition
+metadata:
+  id: gcs
+entity:
+  driver_type: humanitec/terraform
+  name: gcs
+  type: gcs
+  driver_inputs:
+    values:
+      append_logs_to_error: true
+      runner_mode: custom-kubernetes
+      runner:
+        cluster_type: gke
+        cluster:
+          loadbalancer: \${resources['config#terraform-runner'].outputs.loadbalancer}
+          name: \${resources['config#terraform-runner'].outputs.name}
+          project_id: \${resources['config#terraform-runner'].outputs.project_id}
+          zone: \${resources['config#terraform-runner'].outputs.zone}
+        service_account: humanitec-terraform-runner
+        namespace: humanitec-terraform-runner
+      script: |-
+        terraform {
+          backend "gcs" {
+            bucket  = "htc-ref-arch-cluster-terraform-runner-state"
+          }
+        }
+        output "name" {
+          value = "hard-coded-account"
+        }
+    secrets:
+      runner:
+        credentials: \${resources['config#terraform-runner'].outputs.credentials}
+        agent_url: \${resources['agent.default#agent'].outputs.url}
+  criteria:
+    - env_type: development
+EOF
+
+humctl apply \
+    -f gcs.yaml
+```
+
+```bash
+APP=ref-arch
+ENVIRONMENT=development
+
+humctl create app ${APP}
+
+cat <<EOF > score.yaml
+apiVersion: score.dev/v1b1
+metadata:
+  name: ref-arch
+containers:
+  ref-arch:
+    image: .
+resources:
+  my-gcs:
+    type: gcs
+EOF
+
+score-humanitec delta \
+    --retry \
+    --deploy \
+    --token ${HUMANITEC_TOKEN} \
+    --org ${HUMANITEC_ORG} \
+    --app ${APP} \
+    --env ${ENVIRONMENT} \
+    -f score.yaml \
+    --image ghcr.io/mathieu-benoit/my-sample-app:latest
+```
 
 ## Learn more
 

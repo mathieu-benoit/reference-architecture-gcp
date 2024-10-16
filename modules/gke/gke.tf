@@ -28,24 +28,22 @@ resource "google_container_cluster" "gke" {
     }
   }
 
+  fleet {
+    project = var.project_id
+  }
 
   master_authorized_networks_config {
 
-    dynamic "cidr_blocks" {
-      for_each = data.humanitec_source_ip_ranges.main.cidr_blocks
-      content {
-        cidr_block = cidr_blocks.key
-      }
+    cidr_blocks {
+      # Access from this Terraform script to deploy Kubernetes/Helm resources in the GKE cluster:
+      cidr_block = "${chomp(data.http.icanhazip.response_body)}/32"
     }
 
     cidr_blocks {
-      # Open to public internet to make it easier to connect for testing
-      # At least the local IP running terraform needs to be included
-      cidr_block = "0.0.0.0/0"
-
-      # Alternative for tighter access, but less flexibility:
-      # cidr_block = "${chomp(data.http.icanhazip.response_body)}/32"
+      # Access from the Humanitec Agent deployed in the GKE cluster:
+      cidr_block = "${var.agent_humanitec_egress_ip_address}/32"
     }
+
     gcp_public_cidrs_access_enabled = false
   }
 
@@ -101,6 +99,11 @@ resource "google_container_cluster" "gke" {
     enable_private_nodes    = true
   }
 
+  security_posture_config {
+    mode               = "BASIC"
+    vulnerability_mode = "VULNERABILITY_ENTERPRISE"
+  }
+
   lifecycle {
     ignore_changes = [
       node_config # otherwise destroy/recreate with Autopilot...
@@ -129,4 +132,166 @@ resource "google_container_node_pool" "gke_node_pool" {
       enable_integrity_monitoring = true
     }
   }
+}
+
+# GSA for the GKE nodes
+resource "google_service_account" "gke_nodes" {
+  account_id  = "${var.cluster_name}-nodes-sa"
+  description = "Account used by the GKE nodes"
+}
+resource "google_project_iam_member" "gke_nodes" {
+  for_each = toset([
+    "roles/logging.logWriter",
+    "roles/monitoring.metricWriter",
+    "roles/monitoring.viewer",
+    "roles/stackdriver.resourceMetadata.writer",
+  ])
+
+  project = var.project_id
+  role    = each.key
+  member  = "serviceAccount:${google_service_account.gke_nodes.email}"
+}
+
+# GSA for the GKE cluster access from Humanitec
+resource "google_service_account" "gke_cluster_access" {
+  account_id  = var.cluster_name
+  description = "Account used by Humanitec to access the GKE cluster"
+}
+resource "google_project_iam_custom_role" "gke_cluster_access" {
+  role_id     = "humanitec.gkeaccess"
+  title       = "Humanitec GKE access"
+  description = "Can deploy Kubernetes resources from Humanitec to GKE cluster."
+  permissions = [
+    "container.clusters.get"
+  ]
+}
+resource "kubernetes_cluster_role" "humanitec_deploy_access" {
+  metadata {
+    name = "humanitec-deploy-access"
+  }
+
+  # Namespaces management
+  rule {
+    api_groups = [""]
+    resources  = ["namespaces"]
+    verbs      = ["create", "get", "list", "update", "patch", "delete"]
+  }
+
+  # Humanitec's CRs management.
+  rule {
+    api_groups = ["humanitec.io"]
+    resources  = ["resources", "secretmappings", "workloadpatches", "workloads"]
+    verbs      = ["create", "get", "list", "update", "patch", "delete", "deletecollection", "watch"]
+  }
+
+  # Deployment / Workload Status in UI
+  rule {
+    api_groups = ["batch"]
+    resources  = ["jobs"]
+    verbs      = ["get", "list"]
+  }
+  rule {
+    api_groups = ["apps"]
+    resources  = ["deployments", "statefulsets", "replicasets", "daemonsets"]
+    verbs      = ["get", "list"]
+  }
+  rule {
+    api_groups = [""]
+    resources  = ["pods"]
+    verbs      = ["get", "list"]
+  }
+
+  # Container's logs in UI
+  rule {
+    api_groups = [""]
+    resources  = ["pods/log"]
+    verbs      = ["get", "list"]
+  }
+
+  # Pause Environments
+  rule {
+    api_groups = ["apps"]
+    resources  = ["deployments/scale"]
+    verbs      = ["update"]
+  }
+
+  # To get the active resources (resources outputs)
+  rule {
+    api_groups = [""]
+    resources  = ["configmaps"]
+    verbs      = ["get"]
+  }
+}
+resource "kubernetes_cluster_role_binding" "humanitec_deploy_access" {
+  metadata {
+    name = "humanitec-deploy-access"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = kubernetes_cluster_role.humanitec_deploy_access.metadata.0.name
+  }
+  subject {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "User"
+    name      = google_service_account.gke_cluster_access.email
+  }
+}
+resource "kubernetes_role" "humanitec_private_tf_runner" {
+  metadata {
+    name      = "humanitec-private-tf-runner"
+    namespace = kubernetes_namespace.terraform_runner.metadata.0.name
+  }
+
+  # For private TF runner (but not needed if self-hosted TF Driver)
+  rule {
+    api_groups = ["batch"]
+    resources  = ["jobs"]
+    verbs      = ["create", "delete"]
+  }
+  rule {
+    api_groups = [""]
+    resources  = ["secrets"]
+    verbs      = ["get", "create", "delete", "deletecollection"]
+  }
+}
+resource "kubernetes_role_binding" "humanitec_private_tf_runner" {
+  metadata {
+    name      = "humanitec-private-tf-runner"
+    namespace = kubernetes_namespace.terraform_runner.metadata.0.name
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "Role"
+    name      = kubernetes_role.humanitec_private_tf_runner.metadata.0.name
+  }
+  subject {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "User"
+    name      = google_service_account.gke_cluster_access.email
+  }
+}
+resource "google_project_iam_member" "gke_cluster_access" {
+  project = var.project_id
+  role    = "projects/${var.project_id}/roles/${google_project_iam_custom_role.gke_cluster_access.role_id}"
+  member  = "serviceAccount:${google_service_account.gke_cluster_access.email}"
+}
+resource "google_iam_workload_identity_pool" "gke_cluster_access" {
+  workload_identity_pool_id = var.cluster_name
+}
+resource "google_iam_workload_identity_pool_provider" "gke_cluster_access" {
+  display_name                       = var.cluster_name
+  workload_identity_pool_id          = google_iam_workload_identity_pool.gke_cluster_access.workload_identity_pool_id
+  workload_identity_pool_provider_id = var.cluster_name
+  attribute_mapping = {
+    "google.subject" = "assertion.sub"
+  }
+  oidc {
+    issuer_uri = "https://idtoken.humanitec.io"
+  }
+}
+resource "google_service_account_iam_member" "gke_cluster_access" {
+  service_account_id = google_service_account.gke_cluster_access.name
+  role               = "roles/iam.workloadIdentityUser"
+  member             = "principal://iam.googleapis.com/${google_iam_workload_identity_pool.gke_cluster_access.name}/subject/${var.humanitec_org_id}/${var.cluster_name}"
 }

@@ -55,3 +55,9 @@ variable "humanitec_prefix" {
   description = "A prefix that will be attached to all IDs created in Humanitec."
   default     = "htc-ref-arch-"
 }
+
+variable "gke_release_channel" {
+  description = "GKE Release channel to be used"
+  type        = string
+  default     = "RAPID"
+}

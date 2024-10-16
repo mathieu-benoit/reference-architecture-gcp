@@ -100,6 +100,11 @@ variable "gke_autopilot" {
   default     = true
 }
 
+variable "gke_release_channel" {
+  description = "GKE Release channel to be used"
+  type        = string
+}
+
 variable "gar_repository_id" {
   type        = string
   description = "ID of the Google Artifact Registry repository (not created if empty)."
@@ -110,4 +115,16 @@ variable "gar_repository_location" {
   type        = string
   description = "Location of the Google Artifact Registry repository (required when gar_repository_id is set)."
   default     = null
+}
+
+variable "istio_crds_already_installed" {
+  description = "Custom resource definitions must be applied before custom resources."
+  type        = bool
+  default     = false
+}
+
+variable "humanitec_crds_already_installed" {
+  description = "Custom resource definitions must be applied before custom resources."
+  type        = bool
+  default     = false
 }
