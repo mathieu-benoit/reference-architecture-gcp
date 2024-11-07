@@ -38,7 +38,7 @@ resource "kubernetes_role" "terraform_runner" {
     verbs      = ["create", "delete", "get", "list", "update", "deletecollection"]
   }
 
-  # Need leases if you use backend "kubernetes"
+  # Need leases if you use default backend "kubernetes"
   rule {
     api_groups = ["coordination.k8s.io"]
     resources  = ["leases"]
