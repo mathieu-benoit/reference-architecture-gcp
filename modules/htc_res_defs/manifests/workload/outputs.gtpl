@@ -1,7 +1,7 @@
 update:
   - op: add
     path: /spec/serviceAccountName
-    value: $${resources.k8s-service-account.outputs.name}
+    value: ${resources.k8s-service-account.outputs.name}
   - op: add
     path: /spec/automountServiceAccountToken
     value: false
