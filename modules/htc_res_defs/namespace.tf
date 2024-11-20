@@ -7,20 +7,9 @@ resource "humanitec_resource_definition" "k8s_namespace" {
   driver_inputs = {
     values_string = jsonencode({
       templates = {
-        init      = "name: $${context.app.id}-$${context.env.id}"
-        manifests = <<EOL
-namespace.yaml:
-  location: cluster
-  data:
-    apiVersion: v1
-    kind: Namespace
-    metadata:
-      labels:
-        pod-security.kubernetes.io/enforce: restricted
-        istio-injection: enabled
-      name: {{ .init.name }}
-EOL
-        outputs   = "namespace: {{ .init.name }}"
+        init      = file("${path.module}/manifests/k8s-namespace/init.gtpl")
+        manifests = file("${path.module}/manifests/k8s-namespace/manifests.gtpl")
+        outputs   = file("${path.module}/manifests/k8s-namespace/outputs.gtpl")
       }
     })
   }
