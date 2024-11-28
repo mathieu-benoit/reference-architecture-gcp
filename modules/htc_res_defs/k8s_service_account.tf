@@ -17,7 +17,5 @@ resource "humanitec_resource_definition" "k8s_service_account" {
 
 resource "humanitec_resource_definition_criteria" "k8s_service_account" {
   resource_definition_id = humanitec_resource_definition.k8s_service_account.id
-  env_id                 = var.environment
-  env_type               = var.environment_type
   force_delete           = true
 }

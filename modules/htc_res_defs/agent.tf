@@ -12,8 +12,6 @@ resource "humanitec_resource_definition" "agent" {
 
 resource "humanitec_resource_definition_criteria" "agent" {
   resource_definition_id = humanitec_resource_definition.agent.id
-  env_id                 = var.environment
-  env_type               = var.environment_type
   res_id                 = "agent"
   force_delete           = true
 }

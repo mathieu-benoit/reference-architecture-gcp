@@ -17,7 +17,5 @@ resource "humanitec_resource_definition" "ingress" {
 
 resource "humanitec_resource_definition_criteria" "ingress" {
   resource_definition_id = humanitec_resource_definition.ingress.id
-  env_id                 = var.environment
-  env_type               = var.environment_type
   force_delete           = true
 }
