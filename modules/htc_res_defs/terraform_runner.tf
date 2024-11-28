@@ -5,6 +5,15 @@ resource "humanitec_resource_definition" "terraform_runner" {
   type        = "config"
 
   driver_inputs = {
+    secret_refs = jsonencode({
+        agent_url = {
+          value = "$${resources['agent.default#agent'].outputs.url}"
+        }
+        test_test = {
+            ref   = "my-secret"
+            store = "primary"
+        }
+    })
     values_string = jsonencode({
       templates = {
         outputs = {
@@ -24,7 +33,8 @@ resource "humanitec_resource_definition" "terraform_runner" {
           }
         }
         secrets = {
-          agent_url = "$${resources['agent.default#agent'].outputs.url}"
+          agent_url = "{{ .driver.secrets.agent_url }}"
+          test_test = "{{ .driver.secrets.test_test }}"
         }
       }
     })
@@ -33,8 +43,6 @@ resource "humanitec_resource_definition" "terraform_runner" {
 
 resource "humanitec_resource_definition_criteria" "terraform_runner" {
   resource_definition_id = humanitec_resource_definition.terraform_runner.id
-  env_id                 = var.environment
-  env_type               = var.environment_type
   res_id                 = "tf-runner"
   force_delete           = true
 }
