@@ -1,3 +1,5 @@
+[![CI](https://github.com/mathieu-benoit/reference-architecture-gcp/actions/workflows/ci.yaml/badge.svg?branch=advanced)](https://github.com/mathieu-benoit/reference-architecture-gcp/actions/workflows/ci.yaml)
+
 # Humanitec Google Cloud Reference Architecture Implementation
 > TL;DR
 >
