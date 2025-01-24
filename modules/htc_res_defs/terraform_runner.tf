@@ -6,13 +6,13 @@ resource "humanitec_resource_definition" "terraform_runner" {
 
   driver_inputs = {
     secret_refs = jsonencode({
-        agent_url = {
-          value = "$${resources['agent.default#agent'].outputs.url}"
-        }
-        test_test = {
-            ref   = "my-secret"
-            store = "primary"
-        }
+      agent_url = {
+        value = "$${resources['agent.default#agent'].outputs.url}"
+      }
+      test_test = {
+        ref   = "my-secret"
+        store = "primary"
+      }
     })
     values_string = jsonencode({
       templates = {

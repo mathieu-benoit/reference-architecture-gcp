@@ -12,7 +12,7 @@ resource "humanitec_secretstore" "primary" {
 }
 
 resource "humanitec_secretstore" "default" {
-  id      = local.default_secret_store
+  id = local.default_secret_store
   gcpsm = {
     project_id = "not used is the orchestrator per se."
   }

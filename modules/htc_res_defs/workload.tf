@@ -7,7 +7,7 @@ resource "humanitec_resource_definition" "workload" {
   driver_inputs = {
     values_string = jsonencode({
       templates = {
-        outputs   = file("${path.module}/manifests/workload/outputs.gtpl")
+        outputs = file("${path.module}/manifests/workload/outputs.gtpl")
       }
     })
   }
