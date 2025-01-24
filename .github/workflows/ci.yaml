@@ -32,5 +32,10 @@ jobs:
         run: cd ./examples/with-backstage && STUB_FILE=1 node create-gh-app/index.js
       - name: Terraform Validate
         run: make validate
+      - name: install humctl
+        uses: humanitec/setup-cli-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: "*"
       - name: Humanitec Resource Definitions Validate
         run: make test-definitions
