@@ -34,8 +34,14 @@ resource "google_compute_subnetwork" "vpc_subnetworks" {
   ip_cidr_range            = each.value.ip_cidr_range
   region                   = each.value.region
   private_ip_google_access = each.value.private_ip_google_access
-  secondary_ip_range       = each.value.secondary_ip_range
-  depends_on               = [google_compute_network.vpc_network]
+  dynamic "secondary_ip_range" {
+    for_each = each.value.secondary_ip_range
+    content {
+      range_name    = each.value.secondary_ip_range.value["range_name"]
+      ip_cidr_range = each.value.secondary_ip_range.value["ip_cidr_range"]
+    }
+  }
+  depends_on = [google_compute_network.vpc_network]
 
 }
 
