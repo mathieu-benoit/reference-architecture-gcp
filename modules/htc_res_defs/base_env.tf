@@ -9,11 +9,6 @@ resource "humanitec_resource_definition" "base_env" {
     values_string = jsonencode({
       append_logs_to_error = true
 
-      variables = {
-        test-test = <<END_OF_TEXT
-"$${resources['config.default#tf-runner'].outputs.test_test}"
-END_OF_TEXT
-      }
       script = <<EOL
 terraform {
     # Bring your own backend, by setting use_default_backend=false on the terraform-runner.
@@ -22,14 +17,8 @@ terraform {
     #    bucket  = "htc-ref-arch-cluster-terraform-runner-state"
     #}
 }
-variable "test-test" {
-  type      = string
-}
 output "output" {
     value = "simple-test-for-tf-runner"
-}
-output "test-test" {
-    value = var.test-test
 }
 EOL
     })
