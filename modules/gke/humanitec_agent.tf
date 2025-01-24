@@ -29,7 +29,7 @@ resource "helm_release" "humanitec_agent" {
     value = var.humanitec_org_id
   }
 
-  set {
+  set_sensitive {
     name  = "humanitec.privateKey"
     value = var.agent_private_key
   }
