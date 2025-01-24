@@ -27,3 +27,7 @@ $(VALIDATE_TF_DIRS): validate-%:
 # Validate all terraform directories
 validate: $(VALIDATE_TF_DIRS)
 	@echo "All validated"
+
+# Test template res defs
+test-definitions:
+	./scripts/test-definitions.sh
