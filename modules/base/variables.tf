@@ -63,10 +63,6 @@ variable "vpc_subnets" {
     role                     = optional(string)
     region                   = optional(string)
     private_ip_google_access = optional(bool)
-    secondary_ip_range = optional(list(object({
-      range_name    = string
-      ip_cidr_range = string
-    })))
   }))
   description = "List of VPC Subnets"
   default = [

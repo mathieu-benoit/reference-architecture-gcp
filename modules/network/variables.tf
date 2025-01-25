@@ -24,17 +24,12 @@ variable "vpc_description" {
 
 variable "subnets" {
   type = list(object({
-    name                     = string
-    description              = string
-    ip_cidr_range            = string
-    purpose                  = optional(string)
-    role                     = optional(string)
-    region                   = optional(string)
-    private_ip_google_access = optional(bool)
-    secondary_ip_range = optional(list(object({
-      range_name    = string
-      ip_cidr_range = string
-    })))
+    name          = string
+    description   = string
+    ip_cidr_range = string
+    purpose       = optional(string)
+    role          = optional(string)
+    region        = optional(string)
   }))
   description = "List of VPC Subnets"
 }
