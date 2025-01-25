@@ -35,7 +35,6 @@ resource "google_compute_subnetwork" "vpc_subnetworks" {
   region                   = each.value.region
   private_ip_google_access = each.value.private_ip_google_access
   depends_on               = [google_compute_network.vpc_network]
-
 }
 
 ##########################################
