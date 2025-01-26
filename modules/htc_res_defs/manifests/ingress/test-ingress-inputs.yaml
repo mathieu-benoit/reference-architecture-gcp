@@ -1,0 +1,5 @@
+cookie: null
+placeholders:
+  resources.dns.outputs.host: "test"
+resource: {}
+secretRefs: {}

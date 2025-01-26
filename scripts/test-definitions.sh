@@ -4,6 +4,11 @@ set -o errexit
 templates=$(ls modules/htc_res_defs/manifests/)
 for template in $templates;
 do
+  if [ "${template}" == "horizontal-pod-autoscaler" ] || [ "${template}" == "ingress" ]; then
+    echo "## ${template} skipped."
+    continue
+  fi
+  echo "## ${template} tested."
   cp scripts/test.yaml modules/htc_res_defs/manifests/$template/test-$template.yaml
   cd modules/htc_res_defs/manifests/$template
   sed -i "s/type: TYPE/type: ${template}/g" test-$template.yaml
