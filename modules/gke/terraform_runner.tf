@@ -16,11 +16,6 @@ resource "kubernetes_service_account" "terraform_runner" {
       "iam.gke.io/gcp-service-account" = google_service_account.terraform_runner.email
     }
 
-    labels = {
-      "app.kubernetes.io/name"     = "humanitec-terraform-runner"
-      "app.kubernetes.io/instance" = "humanitec-terraform-runner"
-    }
-
     name      = "humanitec-terraform-runner"
     namespace = kubernetes_namespace.terraform_runner.metadata.0.name
   }
