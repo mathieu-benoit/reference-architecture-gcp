@@ -100,7 +100,7 @@ The following is provisioned:
 | gar\_repository\_id | The ID of the Google Artifact Registry repository to use for storing Docker images. | `string` | `null` | no |
 | gar\_repository\_location | Location of the Google Artifact Registry repository. | `string` | `null` | no |
 | humanitec\_crds\_already\_installed | Custom resource definitions must be applied before custom resources. | `bool` | `false` | no |
-| ip\_allocation\_policy | Configuration of cluster IP allocation for VPC-native clusters. | <pre>object({<br>    cluster_secondary_range_name  = optional(string)<br>    services_secondary_range_name = optional(string)<br>    cluster_ipv4_cidr_block       = optional(string)<br>    services_ipv4_cidr_block      = optional(string)<br>    stack_type                    = optional(string)<br>  })</pre> | <pre>{<br>  "cluster_ipv4_cidr_block": "/14",<br>  "services_ipv4_cidr_block": "/20"<br>}</pre> | no |
+| ip\_allocation\_policy | Configuration of cluster IP allocation for VPC-native clusters. | <pre>object({<br/>    cluster_secondary_range_name  = optional(string)<br/>    services_secondary_range_name = optional(string)<br/>    cluster_ipv4_cidr_block       = optional(string)<br/>    services_ipv4_cidr_block      = optional(string)<br/>    stack_type                    = optional(string)<br/>  })</pre> | <pre>{<br/>  "cluster_ipv4_cidr_block": "/14",<br/>  "services_ipv4_cidr_block": "/20"<br/>}</pre> | no |
 | istio\_crds\_already\_installed | Custom resource definitions must be applied before custom resources. | `bool` | `false` | no |
 | node\_size | Size of the GKE nodes. | `string` | `"n2d-standard-4"` | no |
 | release\_channel | n/a | `string` | `"REGULAR"` | no |
