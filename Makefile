@@ -9,6 +9,7 @@ docs:
 	terraform-docs --config docs/.terraform-docs.yaml ./modules/htc_res_defs
 	terraform-docs --config docs/.terraform-docs.yaml ./modules/base
 	terraform-docs --config docs/.terraform-docs.yaml ./modules/gke
+	terraform-docs --config docs/.terraform-docs.yaml ./modules/network
 	terraform-docs --config docs/.terraform-docs.yaml ./examples/with-backstage
 
 # Format all terraform files
