@@ -12,3 +12,4 @@ entity:
         init:
         manifests:
         outputs:
+        secrets:
