@@ -6,9 +6,10 @@ VALIDATE_TF_DIRS = $(addprefix validate-,$(TF_DIRS))
 docs:
 	# terraform-docs --lockfile=false ./modules/base
 	terraform-docs --config docs/.terraform-docs.yaml .
-	terraform-docs --config docs/.terraform-docs-example.yaml .
+	terraform-docs --config docs/.terraform-docs.yaml ./modules/htc_res_defs
+	terraform-docs --config docs/.terraform-docs.yaml ./modules/base
+	terraform-docs --config docs/.terraform-docs.yaml ./modules/gke
 	terraform-docs --config docs/.terraform-docs.yaml ./examples/with-backstage
-	terraform-docs --config docs/.terraform-docs-example.yaml ./examples/with-backstage
 
 # Format all terraform files
 fmt:
