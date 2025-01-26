@@ -80,3 +80,39 @@ resource "google_service_account_iam_member" "terraform_runner_wi" {
   role               = "roles/iam.workloadIdentityUser"
   member             = "serviceAccount:${var.project_id}.svc.id.goog[${kubernetes_namespace.terraform_runner.metadata.0.name}/${kubernetes_service_account.terraform_runner.metadata.0.name}]"
 }
+
+# GKE's Cloud Account to deploy Humanitec TF Runner
+resource "kubernetes_role" "humanitec_private_tf_runner" {
+  metadata {
+    name      = "humanitec-private-tf-runner"
+    namespace = kubernetes_namespace.terraform_runner.metadata.0.name
+  }
+
+  # For private TF runner
+  rule {
+    api_groups = ["batch"]
+    resources  = ["jobs"]
+    verbs      = ["create", "delete"]
+  }
+  rule {
+    api_groups = [""]
+    resources  = ["secrets"]
+    verbs      = ["get", "create", "delete", "deletecollection"]
+  }
+}
+resource "kubernetes_role_binding" "humanitec_private_tf_runner" {
+  metadata {
+    name      = "humanitec-private-tf-runner"
+    namespace = kubernetes_namespace.terraform_runner.metadata.0.name
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "Role"
+    name      = kubernetes_role.humanitec_private_tf_runner.metadata.0.name
+  }
+  subject {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "User"
+    name      = google_service_account.gke_cluster_access.email
+  }
+}
