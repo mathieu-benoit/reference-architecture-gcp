@@ -9,7 +9,6 @@ resource "humanitec_resource_definition" "hpa" {
       templates = {
         init      = file("${path.module}/manifests/horizontal-pod-autoscaler/init.gtpl")
         manifests = file("${path.module}/manifests/horizontal-pod-autoscaler/manifests.gtpl")
-        outputs   = file("${path.module}/manifests/horizontal-pod-autoscaler/outputs.gtpl")
       }
     })
   }

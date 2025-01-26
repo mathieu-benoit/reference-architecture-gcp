@@ -1,5 +1,0 @@
-cookie: null
-placeholders:
-  context.res.id: "modules.test.externals.test"
-resource: {}
-secretRefs: {}
