@@ -9,6 +9,7 @@ locals {
 module "base" {
   source           = "../../modules/base"
   project_id       = var.project_id
+  project_number   = var.project_number
   region           = var.region
   humanitec_org_id = var.humanitec_org_id
   humanitec_prefix = var.humanitec_prefix
