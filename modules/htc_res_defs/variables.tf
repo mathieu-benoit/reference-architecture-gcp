@@ -9,7 +9,11 @@ variable "k8s_loadbalancer" {
 }
 variable "k8s_project_id" {
   type        = string
-  description = "The GCP Project the cluster is in."
+  description = "The GCP Project ID the cluster is in."
+}
+variable "k8s_project_number" {
+  type        = string
+  description = "The GCP Project Number the cluster is in."
 }
 variable "k8s_region" {
   type        = string

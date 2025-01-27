@@ -117,6 +117,7 @@ This reference architecture implementation uses Terraform. You will need to do t
 
    ```
    export GCP_PROJECT_ID=FIXME
+   export GCP_PROJECT_NUMBER=FIXME
    export GCP_REGION=FIXME
    export HUMANITEC_ORG_ID=FIXME
 
@@ -124,6 +125,7 @@ This reference architecture implementation uses Terraform. You will need to do t
       -upgrade
    terraform plan \
       -var project_id=${GCP_PROJECT_ID} \
+      -var project_number=${GCP_PROJECT_NUMBER} \
       -var humanitec_org_id=${HUMANITEC_ORG_ID} \
       -var region=${GCP_REGION} \
       -var istio_crds_already_installed=true \
@@ -217,6 +219,7 @@ Once you are finished with the reference architecture, you can remove all provis
 |------|-------------|------|---------|:--------:|
 | humanitec\_org\_id | ID of the Humanitec Organization to associate resources with. | `string` | n/a | yes |
 | project\_id | GCP Project ID to provision resources in. | `string` | n/a | yes |
+| project\_number | GCP Project Number to provision resources in. | `string` | n/a | yes |
 | region | GCP Region to provision resources in. | `string` | n/a | yes |
 | environment | The environment to associate the reference architecture with. | `string` | `null` | no |
 | environment\_type | The environment type to associate the reference architecture with. | `string` | `"development"` | no |

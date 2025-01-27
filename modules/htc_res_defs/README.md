@@ -16,7 +16,9 @@
 | [humanitec_key.operator](https://registry.terraform.io/providers/humanitec/humanitec/latest/docs/resources/key) | resource |
 | [humanitec_resource_account.cluster_account](https://registry.terraform.io/providers/humanitec/humanitec/latest/docs/resources/resource_account) | resource |
 | [humanitec_resource_definition.agent](https://registry.terraform.io/providers/humanitec/humanitec/latest/docs/resources/resource_definition) | resource |
+| [humanitec_resource_definition.app_config](https://registry.terraform.io/providers/humanitec/humanitec/latest/docs/resources/resource_definition) | resource |
 | [humanitec_resource_definition.base_env](https://registry.terraform.io/providers/humanitec/humanitec/latest/docs/resources/resource_definition) | resource |
+| [humanitec_resource_definition.gke_config](https://registry.terraform.io/providers/humanitec/humanitec/latest/docs/resources/resource_definition) | resource |
 | [humanitec_resource_definition.hpa](https://registry.terraform.io/providers/humanitec/humanitec/latest/docs/resources/resource_definition) | resource |
 | [humanitec_resource_definition.ingress](https://registry.terraform.io/providers/humanitec/humanitec/latest/docs/resources/resource_definition) | resource |
 | [humanitec_resource_definition.ingress-tmp](https://registry.terraform.io/providers/humanitec/humanitec/latest/docs/resources/resource_definition) | resource |
@@ -27,7 +29,9 @@
 | [humanitec_resource_definition.terraform_runner](https://registry.terraform.io/providers/humanitec/humanitec/latest/docs/resources/resource_definition) | resource |
 | [humanitec_resource_definition.workload](https://registry.terraform.io/providers/humanitec/humanitec/latest/docs/resources/resource_definition) | resource |
 | [humanitec_resource_definition_criteria.agent](https://registry.terraform.io/providers/humanitec/humanitec/latest/docs/resources/resource_definition_criteria) | resource |
+| [humanitec_resource_definition_criteria.app_config](https://registry.terraform.io/providers/humanitec/humanitec/latest/docs/resources/resource_definition_criteria) | resource |
 | [humanitec_resource_definition_criteria.base_env](https://registry.terraform.io/providers/humanitec/humanitec/latest/docs/resources/resource_definition_criteria) | resource |
+| [humanitec_resource_definition_criteria.gke_config](https://registry.terraform.io/providers/humanitec/humanitec/latest/docs/resources/resource_definition_criteria) | resource |
 | [humanitec_resource_definition_criteria.ingress](https://registry.terraform.io/providers/humanitec/humanitec/latest/docs/resources/resource_definition_criteria) | resource |
 | [humanitec_resource_definition_criteria.k8s_cluster](https://registry.terraform.io/providers/humanitec/humanitec/latest/docs/resources/resource_definition_criteria) | resource |
 | [humanitec_resource_definition_criteria.k8s_namespace](https://registry.terraform.io/providers/humanitec/humanitec/latest/docs/resources/resource_definition_criteria) | resource |
@@ -50,7 +54,8 @@
 | humanitec\_org\_id | ID of the Humanitec Organization to associate resources with. | `string` | n/a | yes |
 | k8s\_cluster\_name | The name of the cluster. | `string` | n/a | yes |
 | k8s\_loadbalancer | IP address or Host of the load balancer used by the ingress controller. | `string` | n/a | yes |
-| k8s\_project\_id | The GCP Project the cluster is in. | `string` | n/a | yes |
+| k8s\_project\_id | The GCP Project ID the cluster is in. | `string` | n/a | yes |
+| k8s\_project\_number | The GCP Project Number the cluster is in. | `string` | n/a | yes |
 | k8s\_region | The region the cluster is in. | `string` | n/a | yes |
 | operator\_public\_key | The public key of the Operator. | `string` | n/a | yes |
 | prefix | A prefix that will be attached to all IDs created in Humanitec. | `string` | `""` | no |

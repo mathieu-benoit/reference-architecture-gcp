@@ -35,6 +35,7 @@
 | gke\_release\_channel | GKE Release channel to be used | `string` | n/a | yes |
 | humanitec\_org\_id | ID of the Humanitec Organization to associate resources with. | `string` | n/a | yes |
 | project\_id | GCP Project ID to provision resources in. | `string` | n/a | yes |
+| project\_number | GCP Project Number to provision resources in. | `string` | n/a | yes |
 | region | GCP Region to provision resources in. | `string` | n/a | yes |
 | gar\_repository\_id | ID of the Google Artifact Registry repository (not created if empty). | `string` | `null` | no |
 | gar\_repository\_location | Location of the Google Artifact Registry repository (required when gar\_repository\_id is set). | `string` | `null` | no |

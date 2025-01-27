@@ -7,6 +7,10 @@ variable "project_id" {
   description = "GCP Project ID to provision resources in."
 }
 
+variable "project_number" {
+  type        = string
+  description = "GCP Project Number to provision resources in."
+}
 
 variable "region" {
   type        = string

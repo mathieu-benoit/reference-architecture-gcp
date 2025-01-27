@@ -20,7 +20,7 @@ resource "humanitec_resource_definition" "k8s_cluster" {
     values_string = jsonencode({
       "name"         = var.k8s_cluster_name
       "loadbalancer" = var.k8s_loadbalancer
-      "project_id"   = var.k8s_project_id
+      "project_id"   = "$${resources['config.default#gke'].outputs.gke_project_id}"
       "zone"         = var.k8s_region
       "internal_ip"  = true
     }),

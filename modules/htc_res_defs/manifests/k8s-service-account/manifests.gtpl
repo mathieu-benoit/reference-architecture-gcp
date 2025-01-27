@@ -6,6 +6,4 @@ service-account.yaml:
     metadata:
       labels:
         humanitec.io/workload: {{ .init.name }}
-        humanitec.io/app: ${context.app.id}
-        humanitec.io/env: ${context.env.id}
       name: {{ .init.name }}
