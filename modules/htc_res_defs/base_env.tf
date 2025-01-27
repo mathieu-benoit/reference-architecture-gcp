@@ -16,6 +16,9 @@ resource "humanitec_resource_definition" "base_env" {
         shared_directory = "/home/runneruser/workspace"
         namespace        = "humanitec-runner"
         service_account  = "humanitec-runner"
+        "variables" = {
+          TF_MODULE_SOURCE_FOLDER_PATH = "echo"
+        }
       }
       cluster = {
         account = "$${context.org.id}/${humanitec_resource_account.cluster_account.id}"
@@ -29,12 +32,11 @@ resource "humanitec_resource_definition" "base_env" {
       "source" = {
         ref = "refs/heads/main"
         url = "https://github.com/mathieu-benoit/terraform-modules-samples.git"
-        # path = "echo"
       }
       files = {
         "run.sh"                = file("${path.module}/scripts/run-tofu.sh")
-        "terraform.tfvars.json" = "{\"input\": \"$${context.app.id}\"}\n"
-        "backend.tf"            = <<END_OF_TEXT
+        "echo/terraform.tfvars.json" = "{\"input\": \"$${context.app.id}\"}\n"
+        "echo/backend.tf"            = <<END_OF_TEXT
 terraform {
   backend "kubernetes" {
     secret_suffix    = "$${context.res.guresid}"

@@ -10,8 +10,8 @@ run_cmd ()
     fi
 }
 run_cmd cd $\{SCRIPTS_DIRECTORY}
+run_cmd cd $\{TF_MODULE_SOURCE_FOLDER_PATH}
 run_cmd ls -l
-run_cmd pwd
 if [ "$\{ACTION}" = "create" ]
 then
     run_cmd tofu init -no-color
