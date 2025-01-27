@@ -34,7 +34,7 @@ resource "humanitec_resource_definition" "base_env" {
         url = "https://github.com/mathieu-benoit/terraform-modules-samples.git"
       }
       files = {
-        "run.sh"                = file("${path.module}/scripts/run-tofu.sh")
+        "run.sh"                     = file("${path.module}/scripts/run-tofu.sh")
         "echo/terraform.tfvars.json" = "{\"input\": \"$${context.app.id}\"}\n"
         "echo/backend.tf"            = <<END_OF_TEXT
 terraform {
