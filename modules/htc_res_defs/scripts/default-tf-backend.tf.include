@@ -1,0 +1,7 @@
+terraform {
+  backend "kubernetes" {
+    secret_suffix    = "${context.res.guresid}"
+    in_cluster_config = true
+    namespace = "humanitec-runner"
+  }
+}

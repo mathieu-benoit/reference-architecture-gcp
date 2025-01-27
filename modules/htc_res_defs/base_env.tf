@@ -36,15 +36,7 @@ resource "humanitec_resource_definition" "base_env" {
       files = {
         "run.sh"                     = file("${path.module}/scripts/run-tofu.sh")
         "echo/terraform.tfvars.json" = "{\"input\": \"$${context.app.id}\"}\n"
-        "echo/backend.tf"            = <<END_OF_TEXT
-terraform {
-  backend "kubernetes" {
-    secret_suffix    = "$${context.res.guresid}"
-    in_cluster_config = true
-    namespace = "humanitec-runner"
-  }
-}
-END_OF_TEXT
+        "echo/backend.tf"            = file("${path.module}/scripts/default-tf-backend.tf.include")
       }
     })
     secret_refs = jsonencode({
