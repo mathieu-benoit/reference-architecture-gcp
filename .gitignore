@@ -7,7 +7,6 @@
 *.terraformrc
 *.tfvars
 terraform.rc
-*.json
 .DS_Store
 *.bkp
 *.dtmp

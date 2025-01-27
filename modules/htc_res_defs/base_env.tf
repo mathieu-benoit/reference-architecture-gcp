@@ -1,4 +1,3 @@
-# This base-env is just to test the custom TF runner.
 resource "humanitec_resource_definition" "base_env" {
   driver_type = "humanitec/container"
   id          = "${var.prefix}base-env"
@@ -35,7 +34,7 @@ resource "humanitec_resource_definition" "base_env" {
       }
       files = {
         "run.sh"                     = file("${path.module}/scripts/run-tofu.sh")
-        "echo/terraform.tfvars.json" = "{\"input\": \"$${context.app.id}\"}\n"
+        "echo/terraform.tfvars.json" = file("${path.module}/tfvars/base-env/terraform.tfvars.json")
         "echo/backend.tf"            = file("${path.module}/scripts/default-tf-backend.tf.include")
       }
     })
