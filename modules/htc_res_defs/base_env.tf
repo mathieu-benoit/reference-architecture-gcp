@@ -38,7 +38,7 @@ resource "humanitec_resource_definition" "base_env" {
       }
       files = {
         "run.sh"                                                               = file("${path.module}/scripts/run-tofu.sh")
-        "${local.base_env_tf_module_source_folder_path}/terraform.tfvars.json" = file("${path.module}/tfvars/base-env/terraform.tfvars.json")
+        "${local.base_env_tf_module_source_folder_path}/terraform.tfvars.json" = file("${path.module}/tfvars/${local.base_env_tf_module_source_folder_path}/terraform.tfvars.json")
         "${local.base_env_tf_module_source_folder_path}/backend.tf"            = file("${path.module}/scripts/default-tf-backend.tf.include")
       }
     })

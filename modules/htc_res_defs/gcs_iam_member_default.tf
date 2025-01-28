@@ -1,12 +1,12 @@
 locals {
-  gcs_tf_module_source_folder_path = "gcp-gcs"
+  gcs_iam_tf_module_source_folder_path = "gcp-gcs-iam"
 }
 
-resource "humanitec_resource_definition" "gcs_default" {
+resource "humanitec_resource_definition" "gcs_iam_member_default" {
   driver_type = "humanitec/container"
-  id          = "${var.prefix}gcs-default"
-  name        = "${var.prefix}gcs-default"
-  type        = "gcs"
+  id          = "${var.prefix}gcs-iam-member-default"
+  name        = "${var.prefix}gcs-iam-member-default"
+  type        = "gcp-iam-policy-binding"
   driver_account = "$${resources['config.default#app'].account}"
 
   driver_inputs = {
@@ -21,7 +21,7 @@ resource "humanitec_resource_definition" "gcs_default" {
         namespace        = "humanitec-runner"
         service_account  = "humanitec-runner"
         "variables" = {
-          TF_MODULE_SOURCE_FOLDER_PATH = local.gcs_tf_module_source_folder_path
+          TF_MODULE_SOURCE_FOLDER_PATH = local.gcs_iam_tf_module_source_folder_path
         }
       }
       cluster = {
@@ -43,9 +43,9 @@ resource "humanitec_resource_definition" "gcs_default" {
         url = "https://github.com/mathieu-benoit/terraform-modules-samples.git"
       }
       files = {
-        "run.sh"                                                          = file("${path.module}/scripts/run-tofu.sh")
-        "${local.gcs_tf_module_source_folder_path}/terraform.tfvars.json" = file("${path.module}/tfvars/${local.gcs_tf_module_source_folder_path}/terraform.tfvars.json")
-        "${local.gcs_tf_module_source_folder_path}/backend.tf"            = file("${path.module}/scripts/default-tf-backend.tf.include")
+        "run.sh"                                                              = file("${path.module}/scripts/run-tofu.sh")
+        "${local.gcs_iam_tf_module_source_folder_path}/terraform.tfvars.json" = file("${path.module}/tfvars/${local.gcs_iam_tf_module_source_folder_path}/terraform.tfvars.json")
+        "${local.gcs_iam_tf_module_source_folder_path}/backend.tf"            = file("${path.module}/scripts/default-tf-backend.tf.include")
       }
     })
     secret_refs = jsonencode({
@@ -56,16 +56,10 @@ resource "humanitec_resource_definition" "gcs_default" {
       }
     })
   }
-
-  provision = {
-    "gcp-iam-policy-binding.gcs-default" = {
-      is_dependent = true
-    }
-  }
 }
 
-resource "humanitec_resource_definition_criteria" "gcs_default" {
-  resource_definition_id = humanitec_resource_definition.gcs_default.id
-  class                  = "default"
+resource "humanitec_resource_definition_criteria" "gcs_iam_member_default" {
+  resource_definition_id = humanitec_resource_definition.gcs_iam_member_default.id
+  class                  = "gcs-default"
   force_delete           = true
 }
