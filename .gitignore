@@ -11,3 +11,4 @@ terraform.rc
 *.bkp
 *.dtmp
 .source
+.vscode/settings.json
