@@ -10,10 +10,6 @@ resource "kubernetes_namespace" "humanitec_runner" {
 
 resource "kubernetes_service_account" "humanitec_runner" {
   metadata {
-    annotations = {
-      "iam.gke.io/gcp-service-account" = google_service_account.humanitec_runner.email
-    }
-
     name      = "humanitec-runner"
     namespace = kubernetes_namespace.humanitec_runner.metadata.0.name
   }
@@ -59,22 +55,6 @@ resource "kubernetes_role_binding" "humanitec_runner" {
     name      = kubernetes_service_account.humanitec_runner.metadata.0.name
     namespace = kubernetes_namespace.humanitec_runner.metadata.0.name
   }
-}
-
-# GSA to provision TF infra
-resource "google_service_account" "humanitec_runner" {
-  account_id  = "${var.cluster_name}-htcrunner"
-  description = "Account used by Humanitec to provision the Google Cloud infrastructure via the Terraform Driver"
-}
-resource "google_project_iam_member" "humanitec_runner" {
-  project = var.project_id
-  role    = "roles/owner"
-  member  = "serviceAccount:${google_service_account.humanitec_runner.email}"
-}
-resource "google_service_account_iam_member" "humanitec_runner_wi" {
-  service_account_id = google_service_account.humanitec_runner.name
-  role               = "roles/iam.workloadIdentityUser"
-  member             = "serviceAccount:${var.project_id}.svc.id.goog[${kubernetes_namespace.humanitec_runner.metadata.0.name}/${kubernetes_service_account.humanitec_runner.metadata.0.name}]"
 }
 
 # GKE's Cloud Account to deploy Humanitec Runner

@@ -3,10 +3,10 @@ locals {
 }
 
 resource "humanitec_resource_definition" "gcs_iam_member_default" {
-  driver_type = "humanitec/container"
-  id          = "${var.prefix}gcs-iam-member-default"
-  name        = "${var.prefix}gcs-iam-member-default"
-  type        = "gcp-iam-policy-binding"
+  driver_type    = "humanitec/container"
+  id             = "${var.prefix}gcs-iam-member-default"
+  name           = "${var.prefix}gcs-iam-member-default"
+  type           = "gcp-iam-policy-binding"
   driver_account = "$${resources['config.default#app'].account}"
 
   driver_inputs = {

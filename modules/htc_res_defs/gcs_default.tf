@@ -3,10 +3,10 @@ locals {
 }
 
 resource "humanitec_resource_definition" "gcs_default" {
-  driver_type = "humanitec/container"
-  id          = "${var.prefix}gcs-default"
-  name        = "${var.prefix}gcs-default"
-  type        = "gcs"
+  driver_type    = "humanitec/container"
+  id             = "${var.prefix}gcs-default"
+  name           = "${var.prefix}gcs-default"
+  type           = "gcs"
   driver_account = "$${resources['config.default#app'].account}"
 
   driver_inputs = {
