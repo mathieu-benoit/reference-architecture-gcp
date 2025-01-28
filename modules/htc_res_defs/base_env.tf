@@ -1,3 +1,7 @@
+locals {
+  base_env_tf_module_source_folder_path = "echo"
+}
+
 resource "humanitec_resource_definition" "base_env" {
   driver_type = "humanitec/container"
   id          = "${var.prefix}base-env"
@@ -16,7 +20,7 @@ resource "humanitec_resource_definition" "base_env" {
         namespace        = "humanitec-runner"
         service_account  = "humanitec-runner"
         "variables" = {
-          TF_MODULE_SOURCE_FOLDER_PATH = "echo"
+          TF_MODULE_SOURCE_FOLDER_PATH = local.base_env_tf_module_source_folder_path
         }
       }
       cluster = {
@@ -33,9 +37,9 @@ resource "humanitec_resource_definition" "base_env" {
         url = "https://github.com/mathieu-benoit/terraform-modules-samples.git"
       }
       files = {
-        "run.sh"                     = file("${path.module}/scripts/run-tofu.sh")
-        "echo/terraform.tfvars.json" = file("${path.module}/tfvars/base-env/terraform.tfvars.json")
-        "echo/backend.tf"            = file("${path.module}/scripts/default-tf-backend.tf.include")
+        "run.sh"                                                               = file("${path.module}/scripts/run-tofu.sh")
+        "${local.base_env_tf_module_source_folder_path}/terraform.tfvars.json" = file("${path.module}/tfvars/base-env/terraform.tfvars.json")
+        "${local.base_env_tf_module_source_folder_path}/backend.tf"            = file("${path.module}/scripts/default-tf-backend.tf.include")
       }
     })
     secret_refs = jsonencode({
