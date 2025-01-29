@@ -1,5 +1,5 @@
 locals {
-    opentofu_version = "1.9.0"
+  opentofu_version = "1.9.0"
 }
 
 resource "humanitec_resource_account" "terraform_provisioner_account" {
