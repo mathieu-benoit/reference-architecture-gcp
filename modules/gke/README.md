@@ -39,10 +39,13 @@ The following is provisioned:
 | [google_project_iam_member.default_secret_store_access_from_orchestrator](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
 | [google_project_iam_member.gke_cluster_access](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
 | [google_project_iam_member.gke_nodes](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
+| [google_project_iam_member.humanitec_runner_deploy_terraform_for_gcs](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
 | [google_project_iam_member.primary_secret_store_access_from_operator](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
 | [google_service_account.gke_cluster_access](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account) | resource |
 | [google_service_account.gke_nodes](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account) | resource |
+| [google_service_account.humanitec_runner_deploy_terraform](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account) | resource |
 | [google_service_account_iam_member.gke_cluster_access](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account_iam_member) | resource |
+| [google_service_account_iam_member.humanitec_runner_deploy_terraform_for_wi](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account_iam_member) | resource |
 | [helm_release.humanitec_agent](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release) | resource |
 | [helm_release.humanitec_operator](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release) | resource |
 | [helm_release.ingress_nginx](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release) | resource |
@@ -97,12 +100,13 @@ The following is provisioned:
 | Name | Description |
 |------|-------------|
 | cluster\_access\_gsa\_email | n/a |
-| cluster\_access\_wi\_pool\_provider\_name | n/a |
 | cluster\_name | n/a |
 | cluster\_type | n/a |
 | gar\_repository\_id | n/a |
+| gcp\_wi\_pool\_provider\_name | n/a |
 | loadbalancer | n/a |
 | name | n/a |
 | project\_id | n/a |
+| terraform\_provisioner\_gsa\_email | n/a |
 | zone | n/a |
 <!-- END_TF_DOCS -->

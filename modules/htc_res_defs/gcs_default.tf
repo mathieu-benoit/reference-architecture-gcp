@@ -34,8 +34,11 @@ resource "humanitec_resource_definition" "gcs_default" {
         }
       }
       credentials_config = {
-        environment = {
-          access_token = "access_token"
+        script_variables = {
+          variables = {
+            access_token = "access_token"
+          }
+          file = "${local.gcs_tf_module_source_folder_path}/terraform.credentials.tfvars.json"
         }
       }
       source = {

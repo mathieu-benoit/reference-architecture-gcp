@@ -3,7 +3,7 @@ resource "humanitec_resource_definition" "app_config" {
   id             = "${var.prefix}app-config"
   name           = "${var.prefix}app-config"
   type           = "config"
-  driver_account = humanitec_resource_account.cluster_account.id
+  driver_account = humanitec_resource_account.terraform_provisioner_account.id
   driver_inputs = {
     values_string = jsonencode({
       "gcp_project_id" = var.k8s_project_id

@@ -12,10 +12,14 @@ run_cmd ()
 run_cmd cd $\{SCRIPTS_DIRECTORY}
 run_cmd cd $\{TF_MODULE_SOURCE_FOLDER_PATH}
 run_cmd ls -l
+run_cmd cat terraform.tfvars.json
+if test -f "terraform.credentials.tfvars.json"; then
+  run_cmd cat terraform.credentials.tfvars.json
+fi
 if [ "$\{ACTION}" = "create" ]
 then
     run_cmd tofu init -no-color
-    run_cmd tofu apply -auto-approve -input=false -no-color
+    run_cmd tofu apply -auto-approve -input=false -no-color -var-file terraform.credentials.tfvars.json
     mkdir output_parse_container
     echo '{"in":' > output_parse_container/terraform.tfvars.json
     run_cmd tofu output -json >> output_parse_container/terraform.tfvars.json
@@ -33,7 +37,7 @@ output "secrets" { value = {for k, v in var.in: k => v.value if v.sensitive} }' 
 elif [ "$\{ACTION}" = "destroy" ]
 then
     run_cmd tofu init -no-color
-    run_cmd tofu destroy -auto-approve -input=false -no-color
+    run_cmd tofu destroy -auto-approve -input=false -no-color -var-file terraform.credentials.tfvars.json
 else
   echo "unrecognized ACTION: \"$\{ACTION}"\" > "$\{ERROR_FILE}"
   cat "$\{ERROR_FILE}" 1>&2

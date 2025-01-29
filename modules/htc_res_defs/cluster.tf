@@ -1,11 +1,11 @@
 resource "humanitec_resource_account" "cluster_account" {
-  id   = "${var.prefix}cluster"
-  name = "${var.prefix}cluster"
+  id   = element(split("@", var.cluster_access_gsa_email), 0)
+  name = element(split("@", var.cluster_access_gsa_email), 0)
   type = "gcp-identity"
 
   credentials = jsonencode({
     gcp_service_account = var.cluster_access_gsa_email
-    gcp_audience        = "//iam.googleapis.com/${var.cluster_access_wi_pool_provider_name}"
+    gcp_audience        = "//iam.googleapis.com/${var.gcp_wi_pool_provider_name}"
   })
 }
 

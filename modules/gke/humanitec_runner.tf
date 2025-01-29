@@ -101,3 +101,19 @@ resource "kubernetes_role_binding" "humanitec_deploy_runner" {
     name      = google_service_account.gke_cluster_access.email
   }
 }
+
+# GSA to provision TF infra
+resource "google_service_account" "humanitec_runner_deploy_terraform" {
+  account_id  = "${var.cluster_name}-htcrunner"
+  description = "Account used by Humanitec to provision the Google Cloud infrastructure via the Terraform"
+}
+resource "google_service_account_iam_member" "humanitec_runner_deploy_terraform_for_wi" {
+  service_account_id = google_service_account.humanitec_runner_deploy_terraform.name
+  role               = "roles/iam.workloadIdentityUser"
+  member             = "principal://iam.googleapis.com/${google_iam_workload_identity_pool.gke_cluster_access.name}/subject/${var.humanitec_org_id}/${google_service_account.humanitec_runner_deploy_terraform.account_id}"
+}
+resource "google_project_iam_member" "humanitec_runner_deploy_terraform_for_gcs" {
+  project = var.project_id
+  role    = "roles/storage.admin"
+  member  = "serviceAccount:${google_service_account.humanitec_runner_deploy_terraform.email}"
+}

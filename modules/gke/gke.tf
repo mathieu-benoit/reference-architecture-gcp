@@ -259,5 +259,5 @@ resource "google_iam_workload_identity_pool_provider" "gke_cluster_access" {
 resource "google_service_account_iam_member" "gke_cluster_access" {
   service_account_id = google_service_account.gke_cluster_access.name
   role               = "roles/iam.workloadIdentityUser"
-  member             = "principal://iam.googleapis.com/${google_iam_workload_identity_pool.gke_cluster_access.name}/subject/${var.humanitec_org_id}/${var.cluster_name}"
+  member             = "principal://iam.googleapis.com/${google_iam_workload_identity_pool.gke_cluster_access.name}/subject/${var.humanitec_org_id}/${google_service_account.gke_cluster_access.account_id}"
 }

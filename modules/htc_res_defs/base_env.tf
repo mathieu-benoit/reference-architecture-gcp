@@ -3,10 +3,11 @@ locals {
 }
 
 resource "humanitec_resource_definition" "base_env" {
-  driver_type = "humanitec/container"
-  id          = "${var.prefix}base-env"
-  name        = "${var.prefix}base-env"
-  type        = "base-env"
+  driver_type    = "humanitec/container"
+  id             = "${var.prefix}base-env"
+  name           = "${var.prefix}base-env"
+  type           = "base-env"
+  driver_account = "$${resources['config.default#app'].account}"
 
   driver_inputs = {
     values_string = jsonencode({
@@ -32,7 +33,15 @@ resource "humanitec_resource_definition" "base_env" {
           cluster_type = "gke"
         }
       }
-      "source" = {
+      credentials_config = {
+        script_variables = {
+          variables = {
+            access_token = "access_token"
+          }
+          file = "${local.base_env_tf_module_source_folder_path}/terraform.credentials.tfvars.json"
+        }
+      }
+      source = {
         ref = "refs/heads/main"
         url = "https://github.com/mathieu-benoit/terraform-modules-samples.git"
       }

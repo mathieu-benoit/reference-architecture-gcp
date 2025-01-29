@@ -34,8 +34,11 @@ resource "humanitec_resource_definition" "gcs_iam_member_default" {
         }
       }
       credentials_config = {
-        environment = {
-          access_token = "access_token"
+        script_variables = {
+          variables = {
+            access_token = "access_token"
+          }
+          file = "${local.gcs_iam_tf_module_source_folder_path}/terraform.credentials.tfvars.json"
         }
       }
       source = {
@@ -44,7 +47,7 @@ resource "humanitec_resource_definition" "gcs_iam_member_default" {
       }
       files = {
         "run.sh"                                                              = file("${path.module}/scripts/run-tofu.sh")
-        "${local.gcs_iam_tf_module_source_folder_path}/terraform.tfvars.json" = file("${path.module}/tfvars/${local.gcs_iam_tf_module_source_folder_path}/terraform.tfvars.json")
+        "${local.gcs_iam_tf_module_source_folder_path}/terraform.tfvars.json" = "{\"app_id\": \"$${context.app.id}\", \"env_id\": \"$${context.env.id}\",\"res_id\": \"$${context.res.id}\", \"gcs_bucket_name\": \"$${resources['gcs.default'].outputs.name}\",\"principals\": $${resources['gcs.default<workload>k8s-service-account'].outputs.principal}}"
         "${local.gcs_iam_tf_module_source_folder_path}/backend.tf"            = file("${path.module}/scripts/default-tf-backend.tf.include")
       }
     })
