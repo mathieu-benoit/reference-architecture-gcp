@@ -12,7 +12,7 @@ resource "humanitec_resource_definition" "gcs_default" {
   driver_inputs = {
     values_string = jsonencode({
       job = {
-        image = "ghcr.io/opentofu/opentofu:1.9.0"
+        image = "ghcr.io/opentofu/opentofu:${local.opentofu_version}"
         command = [
           "/bin/sh",
           "/home/runneruser/workspace/run.sh"

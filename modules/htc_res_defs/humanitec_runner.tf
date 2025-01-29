@@ -1,3 +1,7 @@
+locals {
+    opentofu_version = "1.9.0"
+}
+
 resource "humanitec_resource_account" "terraform_provisioner_account" {
   id   = element(split("@", var.terraform_provisioner_gsa_email), 0)
   name = element(split("@", var.terraform_provisioner_gsa_email), 0)

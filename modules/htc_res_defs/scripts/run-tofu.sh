@@ -11,11 +11,6 @@ run_cmd ()
 }
 run_cmd cd $\{SCRIPTS_DIRECTORY}
 run_cmd cd $\{TF_MODULE_SOURCE_FOLDER_PATH}
-run_cmd ls -l
-run_cmd cat terraform.tfvars.json
-if test -f "terraform.credentials.tfvars.json"; then
-  run_cmd cat terraform.credentials.tfvars.json
-fi
 if [ "$\{ACTION}" = "create" ]
 then
     run_cmd tofu init -no-color
