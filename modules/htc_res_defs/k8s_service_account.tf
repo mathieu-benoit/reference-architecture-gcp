@@ -6,6 +6,7 @@ resource "humanitec_resource_definition" "k8s_service_account" {
 
   driver_inputs = {
     values_string = jsonencode({
+      res_id = "$${context.res.id}"
       templates = {
         init      = file("${path.module}/manifests/k8s-service-account/init.gtpl")
         manifests = file("${path.module}/manifests/k8s-service-account/manifests.gtpl")
