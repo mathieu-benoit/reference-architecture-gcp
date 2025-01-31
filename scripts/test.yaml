@@ -6,10 +6,3 @@ entity:
   name: test
   type: TYPE
   driver_type: humanitec/template
-  driver_inputs:
-    values:
-      templates:
-        init:
-        manifests:
-        outputs:
-        secrets:

@@ -12,7 +12,7 @@ do
   cp scripts/test.yaml modules/htc_res_defs/manifests/$template/test-$template.yaml
   cd modules/htc_res_defs/manifests/$template
   
-  sed -i "s/type: TYPE/type: ${template}/g" test-$template.yaml
+  yq -i '.entity.type = env(template)' test-$template.yaml
   
   if test -f "init.gtpl"; then
     yq -i '.entity.driver_inputs.values.templates.init = load_str("init.gtpl")' test-$template.yaml
@@ -29,6 +29,8 @@ do
   
   humctl resources test-definition test-$template.yaml --generate > test-$template-inputs.yaml
   
+  # TODO: replace sed with yq in this file
+  # TODO: test cases with fixed inputs file (for regression tests) - for now it's just linting
   sed -i 's/context.res.id: ""/context.res.id: "modules.test.externals.test"/g' test-$template-inputs.yaml
   sed -i 's/""/"test"/g' test-$template-inputs.yaml
   
