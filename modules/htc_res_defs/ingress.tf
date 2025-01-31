@@ -1,7 +1,7 @@
 resource "humanitec_resource_definition" "ingress" {
   driver_type = "humanitec/template"
-  id          = "${var.prefix}ingress-tmp"
-  name        = "${var.prefix}ingress-tmp"
+  id          = "${var.prefix}ingress"
+  name        = "${var.prefix}ingress"
   type        = "ingress"
 
   driver_inputs = {
