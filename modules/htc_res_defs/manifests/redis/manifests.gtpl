@@ -32,7 +32,7 @@ deployment.yaml:
                   - ALL
               privileged: false
               readOnlyRootFilesystem: true
-            image: redis:7-alpine
+            image: redis:7.4.2-alpine
             ports:
             - name: tcp-redis
               containerPort: {{ .init.port }}
