@@ -1,1 +1,0 @@
-name: ${context.app.id}-${context.env.id}

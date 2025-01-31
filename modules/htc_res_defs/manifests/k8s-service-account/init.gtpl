@@ -1,2 +1,0 @@
-name: {{ index ( .driver.values.res_id | splitList "." ) 1 }}
-principal: principal://iam.googleapis.com/projects/${resources['config.default#gke'].outputs.gke_project_number}/locations/global/workloadIdentityPools/${resources['config.default#gke'].outputs.gke_project_id}.svc.id.goog/subject/ns/${resources['k8s-namespace.default#k8s-namespace'].outputs.namespace}/sa/{{ index (splitList "." "${context.res.id}") 1 }}

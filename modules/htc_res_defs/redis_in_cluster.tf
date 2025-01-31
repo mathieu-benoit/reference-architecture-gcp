@@ -5,14 +5,7 @@ resource "humanitec_resource_definition" "redis_in_cluster" {
   driver_type = "humanitec/template"
 
   driver_inputs = {
-    values_string = jsonencode({
-      templates = {
-        init      = file("${path.module}/manifests/redis/init.gtpl")
-        manifests = file("${path.module}/manifests/redis/manifests.gtpl")
-        outputs   = file("${path.module}/manifests/redis/outputs.gtpl")
-        secrets   = file("${path.module}/manifests/redis/secrets-outputs.gtpl")
-      }
-    })
+    values_string = jsonencode(yamldecode(file("${path.module}/manifests/redis/definition-values.yaml")))
   }
 }
 

@@ -5,11 +5,7 @@ resource "humanitec_resource_definition" "workload" {
   type        = "workload"
 
   driver_inputs = {
-    values_string = jsonencode({
-      templates = {
-        outputs = file("${path.module}/manifests/workload/outputs.gtpl")
-      }
-    })
+    values_string = jsonencode(yamldecode(file("${path.module}/manifests/workload/definition-values.yaml")))
   }
 }
 

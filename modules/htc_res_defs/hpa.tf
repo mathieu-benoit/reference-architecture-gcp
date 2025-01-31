@@ -5,12 +5,7 @@ resource "humanitec_resource_definition" "hpa" {
   type        = "horizontal-pod-autoscaler"
 
   driver_inputs = {
-    values_string = jsonencode({
-      templates = {
-        init      = file("${path.module}/manifests/horizontal-pod-autoscaler/init.gtpl")
-        manifests = file("${path.module}/manifests/horizontal-pod-autoscaler/manifests.gtpl")
-      }
-    })
+    values_string = jsonencode(yamldecode(file("${path.module}/manifests/horizontal-pod-autoscaler/definition-values.yaml")))
   }
 }
 

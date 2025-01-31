@@ -5,13 +5,7 @@ resource "humanitec_resource_definition" "k8s_namespace" {
   type        = "k8s-namespace"
 
   driver_inputs = {
-    values_string = jsonencode({
-      templates = {
-        init      = file("${path.module}/manifests/k8s-namespace/init.gtpl")
-        manifests = file("${path.module}/manifests/k8s-namespace/manifests.gtpl")
-        outputs   = file("${path.module}/manifests/k8s-namespace/outputs.gtpl")
-      }
-    })
+    values_string = jsonencode(yamldecode(file("${path.module}/manifests/k8s-namespace/definition-values.yaml")))
   }
 }
 

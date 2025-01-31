@@ -14,18 +14,7 @@ do
   
   yq -i '.entity.type = env(template)' test-$template.yaml
   
-  if test -f "init.gtpl"; then
-    yq -i '.entity.driver_inputs.values.templates.init = load_str("init.gtpl")' test-$template.yaml
-  fi
-  if test -f "manifests.gtpl"; then
-  yq -i '.entity.driver_inputs.values.templates.manifests = load_str("manifests.gtpl")' test-$template.yaml
-  fi
-  if test -f "outputs.gtpl"; then
-  yq -i '.entity.driver_inputs.values.templates.outputs = load_str("outputs.gtpl")' test-$template.yaml
-  fi
-  if test -f "secrets-outputs.gtpl"; then
-  yq -i '.entity.driver_inputs.values.templates.secrets = load_str("secrets-outputs.gtpl")' test-$template.yaml
-  fi
+  yq -i '.entity.driver_inputs.values = load("definition-values.yaml")' test-$template.yaml
   
   humctl resources test-definition test-$template.yaml --generate > test-$template-inputs.yaml
   
