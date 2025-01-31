@@ -12,7 +12,7 @@ do
   cp scripts/test.yaml modules/htc_res_defs/manifests/$template/test-$template.yaml
   cd modules/htc_res_defs/manifests/$template
   
-  yq -i '.entity.type = env(template)' test-$template.yaml
+  template=$template yq -i '.entity.type = env(template)' test-$template.yaml
   
   yq -i '.entity.driver_inputs.values = load("definition-values.yaml")' test-$template.yaml
   
