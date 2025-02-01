@@ -1,14 +1,26 @@
 annotations:
   nginx.ingress.kubernetes.io/service-upstream: "true"
 class: nginx
+host: ${resources.dns.outputs.host}
+routePaths: ${resources.dns<route.outputs.path}
+routePorts: ${resources.dns<route.outputs.port}
+routeServices: ${resources.dns<route.outputs.service}
 templates:
   init: |-
-    host: ${resources.dns.outputs.host}
-    routePaths: ${resources.dns<route.outputs.path}
-    routePorts: ${resources.dns<route.outputs.port}
-    routeServices: ${resources.dns<route.outputs.service}
+    tls_secret_name: {{ if
+      (or
+        .driver.values.no_tls
+        (and
+          (hasKey .driver.values "tls_secret_name" )
+          (ne .driver.values.tls_secret_name "" )
+        )
+      ) -}}
+      ""
+    {{- else -}}
+      ${resources.tls-cert.outputs.tls_secret_name}
+    {{- end }}
   manifests: |-
-    {{- if gt (len .init.routePaths ) 0 -}}
+    {{- if gt (len .driver.values.routePaths ) 0 -}}
     ingress.yaml:
       location: namespace
       data:
@@ -27,30 +39,31 @@ templates:
           ingressClassName: {{ .driver.values.class | toRawJson }}
           {{- end }}
           rules:
-          - host: {{ .init.host | toRawJson }}
+          - host: {{ .driver.values.host | toRawJson }}
             http:
               paths:
               {{- /*
-                We are guaranteed that .init.routePaths is non-zero in
+                We are guaranteed that .driver.values.routePaths is non-zero in
                 length from the top level if statement, so we don't need
                 to deal with the empty condition.
               */ -}}
-              {{- range $index, $path := .init.routePaths }}
+              {{- range $index, $path := .driver.values.routePaths }}
               - path: {{ $path | toRawJson }}
                 pathType: {{ $.driver.values.path_type | default "Prefix" | toRawJson }}
                 backend:
                   service:
-                    name: {{ index $.init.routeServices $index  | toRawJson }}
+                    name: {{ index $.driver.values.routeServices $index  | toRawJson }}
                     port:
-                      number: {{ index $.init.routePorts $index }}
+                      number: {{ index $.driver.values.routePorts $index }}
               {{- end }}
-          {{- if not (or .driver.values.no_tls (eq (.driver.values.tls_secret_name | default "") "")) }}
+          {{- if not (or .driver.values.no_tls (eq .init.tls_secret_name "")) }}
           tls:
           - hosts:
-            - {{ .init.host | toRawJson }}
-            secretName: {{ .driver.values.tls_secret_name | toRawJson }}
+            - {{ .driver.values.host | toRawJson }}
+            secretName: {{ .init.tls_secret_name | quote }}
           {{- end }}
     {{- end -}}
   outputs: |-
     no_tls: {{ .driver.values.no_tls | default false }}
     id: {{ .id }}-ingress
+    tls_secret_name: {{ .init.tls_secret_name }}
