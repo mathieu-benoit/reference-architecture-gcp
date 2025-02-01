@@ -117,8 +117,13 @@ resource "google_project_iam_member" "humanitec_runner_deploy_terraform_for_gcs"
   role    = "roles/storage.admin"
   member  = "serviceAccount:${google_service_account.humanitec_runner_deploy_terraform.email}"
 }
-resource "google_project_iam_member" "humanitec_runner_deploy_terraform_for_vertex_ai" {
+resource "google_project_iam_member" "humanitec_runner_deploy_terraform_for_serviceusage_enablement" {
   project = var.project_id
   role    = "roles/serviceusage.serviceUsageAdmin"
+  member  = "serviceAccount:${google_service_account.humanitec_runner_deploy_terraform.email}"
+}
+resource "google_project_iam_member" "humanitec_runner_deploy_terraform_for_project_iammember_management" {
+  project = var.project_id
+  role    = "roles/resourcemanager.projectIamAdmin"
   member  = "serviceAccount:${google_service_account.humanitec_runner_deploy_terraform.email}"
 }
