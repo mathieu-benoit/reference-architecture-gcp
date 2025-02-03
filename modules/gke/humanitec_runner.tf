@@ -127,3 +127,8 @@ resource "google_project_iam_member" "humanitec_runner_deploy_terraform_for_proj
   role    = "roles/resourcemanager.projectIamAdmin"
   member  = "serviceAccount:${google_service_account.humanitec_runner_deploy_terraform.email}"
 }
+resource "google_project_iam_member" "humanitec_runner_deploy_terraform_for_apphub" {
+  project = var.project_id
+  role    = "roles/apphub.editor"
+  member  = "serviceAccount:${google_service_account.humanitec_runner_deploy_terraform.email}"
+}
