@@ -1,12 +1,12 @@
 locals {
-  base_env_tf_module_source_folder_path = "echo"
+  app_hub_app_tf_module_source_folder_path = "gcp-app-hub-app"
 }
 
-resource "humanitec_resource_definition" "base_env" {
+resource "humanitec_resource_definition" "app_hub_app" {
   driver_type    = "humanitec/container"
-  id             = "${var.prefix}base-env"
-  name           = "${var.prefix}base-env"
-  type           = "base-env"
+  id             = "${var.prefix}apphub-app"
+  name           = "${var.prefix}apphub-app"
+  type           = "${var.humanitec_org_id}/gcp-apphub-app"
   driver_account = "$${resources['config.default#app'].account}"
 
   driver_inputs = {
@@ -21,7 +21,7 @@ resource "humanitec_resource_definition" "base_env" {
         namespace        = "humanitec-runner"
         service_account  = "humanitec-runner"
         "variables" = {
-          TF_MODULE_SOURCE_FOLDER_PATH = local.base_env_tf_module_source_folder_path
+          TF_MODULE_SOURCE_FOLDER_PATH = local.app_hub_app_tf_module_source_folder_path
         }
       }
       cluster = {
@@ -38,7 +38,7 @@ resource "humanitec_resource_definition" "base_env" {
           variables = {
             access_token = "access_token"
           }
-          file = "${local.base_env_tf_module_source_folder_path}/terraform.credentials.tfvars.json"
+          file = "${local.app_hub_app_tf_module_source_folder_path}/terraform.credentials.tfvars.json"
         }
       }
       source = {
@@ -46,9 +46,9 @@ resource "humanitec_resource_definition" "base_env" {
         url = "https://github.com/mathieu-benoit/terraform-modules-samples.git"
       }
       files = {
-        "run.sh"                                                               = file("${path.module}/scripts/run-tofu.sh")
-        "${local.base_env_tf_module_source_folder_path}/terraform.tfvars.json" = "{\"input\": \"$${context.app.id}\"}"
-        "${local.base_env_tf_module_source_folder_path}/backend.tf"            = file("${path.module}/scripts/default-tf-backend.tf.include")
+        "run.sh"                                                                  = file("${path.module}/scripts/run-tofu.sh")
+        "${local.app_hub_app_tf_module_source_folder_path}/terraform.tfvars.json" = "{\"app_id\": \"$${context.app.id}\", \"env_id\": \"$${context.env.id}\", \"env_type\": \"$${context.env.type}\", \"project_id\": \"$${resources['config.default#app'].outputs.gcp_project_id}\", \"region\": \"$${resources['config.default#app'].outputs.gcp_region}\"}"
+        "${local.app_hub_app_tf_module_source_folder_path}/backend.tf"            = file("${path.module}/scripts/default-tf-backend.tf.include")
       }
     })
     secret_refs = jsonencode({
@@ -59,15 +59,9 @@ resource "humanitec_resource_definition" "base_env" {
       }
     })
   }
-
-  provision = {
-    "${var.humanitec_org_id}/gcp-apphub-app" = {
-      is_dependent = true
-    }
-  }
 }
 
-resource "humanitec_resource_definition_criteria" "base_env" {
-  resource_definition_id = humanitec_resource_definition.base_env.id
+resource "humanitec_resource_definition_criteria" "app_hub_app" {
+  resource_definition_id = humanitec_resource_definition.app_hub_app.id
   force_delete           = true
 }
