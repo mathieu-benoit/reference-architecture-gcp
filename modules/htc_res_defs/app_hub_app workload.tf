@@ -47,7 +47,7 @@ resource "humanitec_resource_definition" "app_hub_workload" {
       }
       files = {
         "run.sh"                                                                       = file("${path.module}/scripts/run-tofu.sh")
-        "${local.app_hub_workload_tf_module_source_folder_path}/terraform.tfvars.json" = "{\"app_id\": \"$${context.app.id}\", \"env_id\": \"$${context.env.id}\", \"res_id\": \"$${context.res.id}\", \"project_id\": \"$${resources['config.default#gke'].outputs.gke_project_id}\", \"region\": \"$${resources['config.default#gke'].outputs.gke_region}\", \"gke_project_number\": \"$${resources['config.default#gke'].outputs.gke_project_number}\", \"gke_name\": \"$${resources['config.default#gke'].outputs.gke_name}\", \"namespace\": \"$${resources['k8s-namespace.default#k8s-namespace'].outputs.namespace}\"}"
+        "${local.app_hub_workload_tf_module_source_folder_path}/terraform.tfvars.json" = "{\"app_id\": \"$${context.app.id}\", \"env_id\": \"$${context.env.id}\", \"env_type\": \"$${context.env.type}\", \"res_id\": \"$${context.res.id}\", \"project_id\": \"$${resources['config.default#gke'].outputs.gke_project_id}\", \"region\": \"$${resources['config.default#gke'].outputs.gke_region}\", \"gke_project_number\": \"$${resources['config.default#gke'].outputs.gke_project_number}\", \"gke_name\": \"$${resources['config.default#gke'].outputs.gke_name}\", \"namespace\": \"$${resources['k8s-namespace.default#k8s-namespace'].outputs.namespace}\"}"
         "${local.app_hub_workload_tf_module_source_folder_path}/backend.tf"            = file("${path.module}/scripts/default-tf-backend.tf.include")
       }
     })
