@@ -47,7 +47,7 @@ resource "humanitec_resource_definition" "app_hub_app" {
       }
       files = {
         "run.sh"                                                                  = file("${path.module}/scripts/run-tofu.sh")
-        "${local.app_hub_app_tf_module_source_folder_path}/terraform.tfvars.json" = "{\"app_id\": \"$${context.app.id}\", \"env_id\": \"$${context.env.id}\", \"env_type\": \"$${context.env.type}\", \"project_id\": \"$${resources['config.default#app'].outputs.gcp_project_id}\", \"region\": \"$${resources['config.default#app'].outputs.gcp_region}\"}"
+        "${local.app_hub_app_tf_module_source_folder_path}/terraform.tfvars.json" = "{\"app_id\": \"$${context.app.id}\", \"env_id\": \"$${context.env.id}\", \"env_type\": \"$${context.env.type}\", \"project_id\": \"$${resources['config.default#gke'].outputs.gke_project_id}\", \"region\": \"$${resources['config.default#gke'].outputs.gke_region}\"}"
         "${local.app_hub_app_tf_module_source_folder_path}/backend.tf"            = file("${path.module}/scripts/default-tf-backend.tf.include")
       }
     })
