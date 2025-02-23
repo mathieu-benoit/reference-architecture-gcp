@@ -60,11 +60,11 @@ resource "humanitec_resource_definition" "base_env" {
     })
   }
 
-  provision = {
-    "${var.humanitec_org_id}/gcp-apphub-app" = {
-      is_dependent = true
-    }
-  }
+  #provision = {
+  #  "${var.humanitec_org_id}/gcp-apphub-app" = {
+  #    is_dependent = true
+  #  }
+  #}
 }
 
 resource "humanitec_resource_definition_criteria" "base_env" {
