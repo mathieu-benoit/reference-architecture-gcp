@@ -13,7 +13,7 @@ resource "helm_release" "humanitec_agent" {
   namespace  = kubernetes_namespace.agent-namespace.metadata.0.name
   repository = "oci://ghcr.io/humanitec/charts"
   chart      = "humanitec-agent"
-  version    = "1.2.8"
+  version    = "1.2.9"
   wait       = true
   timeout    = 300
 
