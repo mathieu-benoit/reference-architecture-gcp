@@ -8,7 +8,7 @@ resource "humanitec_resource_definition" "ingress" {
       "annotations" = {
         "nginx.ingress.kubernetes.io/service-upstream" = "true"
       }
-      "class"  = "nginx"
+      "class" = "nginx"
     })
   }
 }
