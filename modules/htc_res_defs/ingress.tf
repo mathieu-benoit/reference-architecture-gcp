@@ -1,20 +1,4 @@
 resource "humanitec_resource_definition" "ingress" {
-  driver_type = "humanitec/template"
-  id          = "${var.prefix}ingress"
-  name        = "${var.prefix}ingress"
-  type        = "ingress"
-
-  driver_inputs = {
-    values_string = jsonencode(yamldecode(file("${path.module}/manifests/ingress/definition-values.yaml")))
-  }
-}
-
-resource "humanitec_resource_definition_criteria" "ingress" {
-  resource_definition_id = humanitec_resource_definition.ingress.id
-  force_delete           = true
-}
-
-/*resource "humanitec_resource_definition" "ingress" {
   driver_type = "humanitec/ingress"
   id          = "${var.prefix}ingress"
   name        = "${var.prefix}ingress"
@@ -27,4 +11,9 @@ resource "humanitec_resource_definition_criteria" "ingress" {
       "class"  = "nginx"
     })
   }
-}*/
+}
+
+resource "humanitec_resource_definition_criteria" "ingress" {
+  resource_definition_id = humanitec_resource_definition.ingress.id
+  force_delete           = true
+}
