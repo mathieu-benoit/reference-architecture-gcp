@@ -1,7 +1,21 @@
+resId: ${context.res.id}
 templates:
+  cookie: |
+    port: {{ .init.port }}
+    name: {{ .init.name }}
   init: |-
-    name: redis-{{ randAlpha 5 | lower}}
+    {{- if .cookie }}
+    port: {{ .cookie.port }}
+    name: {{ .cookie.name }}
+    {{- else }}
     port: 6379
+    # Deployment names shouldn't be > 47 https://pauldally.medium.com/why-you-try-to-keep-your-deployment-names-to-47-characters-or-less-1f93a848d34c
+    {{ if regexMatch "modules\\.[a-z0-9-]+\\.externals" .driver.values.resId }}
+    name: redis-{{ index (splitList "." .driver.values.resId) 1 | substr 0 20 }}-{{ index (splitList "." .driver.values.resId) 3 | substr 0 20 }}
+    {{- else }}
+    name: redis-{{ index (splitList "." .driver.values.resId) 1 | substr 0 40 }}
+    {{- end }}
+    {{- end }}
   manifests: |-
     deployment.yaml:
       location: namespace
@@ -11,7 +25,6 @@ templates:
         metadata:
           name: {{ .init.name }}
         spec:
-          replicas: 1
           selector:
             matchLabels:
               app: {{ .init.name }}
@@ -65,6 +78,6 @@ templates:
   outputs: |-
     host: {{ .init.name }}
     port: {{ .init.port }}
-  secrets: |
+  secrets: |-
     username: ""
     password: ""
