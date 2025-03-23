@@ -6,5 +6,8 @@ terraform {
     google = {
       source = "hashicorp/google"
     }
+    tls = {
+      source = "hashicorp/tls"
+    }
   }
 }

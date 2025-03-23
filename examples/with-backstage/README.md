@@ -133,8 +133,10 @@ Once you are finished with the reference architecture, you can remove all provis
 | humanitec\_ci\_service\_user\_token | Humanitec CI Service User Token | `string` | n/a | yes |
 | humanitec\_org\_id | Humanitec Organization ID | `string` | n/a | yes |
 | project\_id | GCP Project ID to provision resources in. | `string` | n/a | yes |
+| project\_number | GCP Project Number to provision resources in. | `string` | n/a | yes |
 | region | GCP Region to provision resources in. | `string` | n/a | yes |
 | environment | The environment to associate the reference architecture with. | `string` | `null` | no |
 | environment\_type | The environment type to associate the reference architecture with. | `string` | `"development"` | no |
+| gke\_release\_channel | GKE Release channel to be used | `string` | `"RAPID"` | no |
 | humanitec\_prefix | A prefix that will be attached to all IDs created in Humanitec. | `string` | `"htc-ref-arch-"` | no |
 <!-- END_TF_DOCS -->

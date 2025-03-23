@@ -7,6 +7,10 @@ variable "project_id" {
   description = "GCP Project ID to provision resources in."
 }
 
+variable "project_number" {
+  type        = string
+  description = "GCP Project Number to provision resources in."
+}
 
 variable "region" {
   type        = string
@@ -39,4 +43,28 @@ variable "humanitec_prefix" {
   type        = string
   description = "A prefix that will be attached to all IDs created in Humanitec."
   default     = "htc-ref-arch-"
+}
+
+variable "gar_repository_id" {
+  type        = string
+  description = "ID of the Google Artifact Registry repository."
+  default     = "htc-ref-arch-cluster"
+}
+
+variable "gke_release_channel" {
+  description = "GKE Release channel to be used"
+  type        = string
+  default     = "RAPID"
+}
+
+variable "istio_crds_already_installed" {
+  description = "Custom resource definitions must be applied before custom resources."
+  type        = bool
+  default     = false
+}
+
+variable "humanitec_crds_already_installed" {
+  description = "Custom resource definitions must be applied before custom resources."
+  type        = bool
+  default     = false
 }

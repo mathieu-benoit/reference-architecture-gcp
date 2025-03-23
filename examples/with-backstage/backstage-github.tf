@@ -73,7 +73,6 @@ resource "github_repository" "backstage" {
   }
 
   depends_on = [
-    module.base,
     module.gh_oidc,
     humanitec_application.backstage,
     humanitec_resource_definition_criteria.backstage_postgres,

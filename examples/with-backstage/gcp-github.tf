@@ -1,6 +1,5 @@
 locals {
-  service_account_name = "htc-ref-arch-gha-gar-push"
-  name                 = "htc-ref-arch"
+  service_account_name = "${var.gar_repository_id}-gha-gar-push"
   cloud_provider       = "gcp"
 }
 
@@ -27,6 +26,7 @@ module "gh_oidc" {
     "attribute.repository"       = "assertion.repository"
     "attribute.repository_owner" = "assertion.repository_owner"
   }
+  attribute_condition = "attribute.repository_owner == \"${var.github_org_id}\""
   sa_mapping = {
     (google_service_account.sa.account_id) = {
       sa_name   = google_service_account.sa.name
@@ -44,7 +44,7 @@ resource "google_service_account" "sa" {
 resource "google_artifact_registry_repository_iam_member" "gha_gar_containers_writer" {
   project    = var.project_id
   location   = var.gar_repository_location
-  repository = module.base.gar_repository_id
+  repository = var.gar_repository_id
   role       = "roles/artifactregistry.writer"
   member     = "serviceAccount:${google_service_account.sa.email}"
 }

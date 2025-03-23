@@ -7,6 +7,10 @@ variable "project_id" {
   description = "GCP Project ID to provision resources in."
 }
 
+variable "project_number" {
+  type        = string
+  description = "GCP Project Number to provision resources in."
+}
 
 variable "region" {
   type        = string
@@ -16,6 +20,11 @@ variable "region" {
 variable "gar_repository_location" {
   type        = string
   description = "Location of the Google Artifact Registry repository,"
+}
+
+variable "gar_repository_id" {
+  type        = string
+  description = "ID of the Google Artifact Registry repository,"
 }
 
 variable "github_org_id" {
@@ -32,6 +41,11 @@ variable "humanitec_ci_service_user_token" {
   description = "Humanitec CI Service User Token"
   type        = string
   sensitive   = true
+}
+
+variable "humanitec_secret_store_id" {
+  description = "Humanitec SecretStore ID"
+  type        = string
 }
 
 ##########################################
@@ -54,4 +68,10 @@ variable "humanitec_prefix" {
   type        = string
   description = "A prefix that will be attached to all IDs created in Humanitec."
   default     = "htc-ref-arch-"
+}
+
+variable "gke_release_channel" {
+  description = "GKE Release channel to be used"
+  type        = string
+  default     = "RAPID"
 }

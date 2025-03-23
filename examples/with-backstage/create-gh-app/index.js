@@ -54,6 +54,7 @@ const handleIndex = (req, res, GITHUB_ORG_ID) => {
       actions_variables: 'write',
       secrets: 'write',
       environments: 'write',
+      actions: 'write',
     },
     name: `backstage-${GITHUB_ORG_ID}`,
     url: 'https://backstage.io',

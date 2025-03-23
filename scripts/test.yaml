@@ -1,0 +1,8 @@
+apiVersion: entity.humanitec.io/v1b1
+kind: Definition
+metadata:
+  id: test
+entity:
+  name: test
+  type: TYPE
+  driver_type: humanitec/template
