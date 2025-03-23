@@ -5,6 +5,9 @@ environment = ""
 # The environment type to associate the reference architecture with.
 environment_type = "development"
 
+# ID of the Google Artifact Registry repository,
+gar_repository_id = ""
+
 # Location of the Google Artifact Registry repository,
 gar_repository_location = ""
 
@@ -28,3 +31,5 @@ project_id = ""
 
 # GCP Region to provision resources in.
 region = ""
+
+humanitec_secret_store_id = ""
