@@ -22,6 +22,11 @@ variable "gar_repository_location" {
   description = "Location of the Google Artifact Registry repository,"
 }
 
+variable "gar_repository_id" {
+  type        = string
+  description = "ID of the Google Artifact Registry repository,"
+}
+
 variable "github_org_id" {
   description = "GitHub org id"
   type        = string
@@ -36,6 +41,11 @@ variable "humanitec_ci_service_user_token" {
   description = "Humanitec CI Service User Token"
   type        = string
   sensitive   = true
+}
+
+variable "humanitec_secret_store_id" {
+  description = "Humanitec SecretStore ID"
+  type        = string
 }
 
 ##########################################
